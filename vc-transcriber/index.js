@@ -55,8 +55,44 @@ const IGNORE_USER_IDS = (process.env.IGNORE_USER_IDS || '')
 const FILTER_FILLER = (process.env.FILTER_FILLER || 'true').toLowerCase() === 'true';
 const DEBUG_VC = (process.env.DEBUG_VC || 'false').toLowerCase() === 'true';
 
+const TRANSCRIBE_REQUIRE_START =
+  (process.env.TRANSCRIBE_REQUIRE_START || 'false').toLowerCase() === 'true';
+const START_PHRASES = parsePhraseList(
+  process.env.TRANSCRIBE_START_PHRASES || (TRANSCRIBE_REQUIRE_START ? 'start' : '')
+);
+const STOP_PHRASES = parsePhraseList(
+  process.env.TRANSCRIBE_STOP_PHRASES || (TRANSCRIBE_REQUIRE_START ? 'stop,end' : '')
+);
+
 function logDebug(...args) {
   if (DEBUG_VC) console.log('[vc]', ...args);
+}
+
+function normalizePhrase(input) {
+  return String(input || '')
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function parsePhraseList(value) {
+  return String(value || '')
+    .split(',')
+    .map((phrase) => normalizePhrase(phrase))
+    .filter(Boolean);
+}
+
+function escapeRegex(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function matchesPhrase(normalizedText, phrases) {
+  if (!normalizedText || phrases.length === 0) return false;
+  return phrases.some((phrase) => {
+    const re = new RegExp(`\\b${escapeRegex(phrase)}\\b`, 'i');
+    return re.test(normalizedText);
+  });
 }
 
 const client = new Client({
@@ -70,6 +106,7 @@ const client = new Client({
 
 let connection = null;
 const activeStreams = new Map();
+let gateOpen = !TRANSCRIBE_REQUIRE_START;
 
 function isFillerMessage(text) {
   const tokens = text
@@ -156,6 +193,27 @@ async function handleUserStream(userId, stream) {
     if (!transcript) {
       await cleanupFiles(rawPath, wavPath);
       return;
+    }
+
+    const normalized = normalizePhrase(transcript);
+
+    if (TRANSCRIBE_REQUIRE_START) {
+      if (!gateOpen) {
+        if (matchesPhrase(normalized, START_PHRASES)) {
+          gateOpen = true;
+          logDebug('gate open', userId, transcript);
+        } else {
+          await cleanupFiles(rawPath, wavPath);
+          return;
+        }
+      }
+
+      if (matchesPhrase(normalized, STOP_PHRASES)) {
+        gateOpen = false;
+        logDebug('gate closed', userId, transcript);
+        await cleanupFiles(rawPath, wavPath);
+        return;
+      }
     }
 
     if (FILTER_FILLER && isFillerMessage(transcript)) {

@@ -25,6 +25,11 @@ cp .env.example .env
 npm start
 ```
 
+Optional: start/stop gating
+- `TRANSCRIBE_REQUIRE_START=true`
+- `TRANSCRIBE_START_PHRASES=start`
+- `TRANSCRIBE_STOP_PHRASES=stop,end`
+
 ## Quick start (voice-bridge)
 ```bash
 cd voice-bridge

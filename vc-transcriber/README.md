@@ -25,3 +25,7 @@ npm start
 ## Notes
 - `WHISPER_MODEL=small` is a good accuracy/speed balance on CPU.
 - If you have a GPU, set `WHISPER_DEVICE=cuda` and `WHISPER_COMPUTE_TYPE=float16`.
+- Optional start/stop gating:
+  - Set `TRANSCRIBE_REQUIRE_START=true`
+  - Set `TRANSCRIBE_START_PHRASES=start`
+  - Set `TRANSCRIBE_STOP_PHRASES=stop,end`
