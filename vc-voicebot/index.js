@@ -62,10 +62,7 @@ const ALLOW_BOT_MESSAGES = (process.env.ALLOW_BOT_MESSAGES || 'true').toLowerCas
 const YOUR_USER_ID = (process.env.YOUR_USER_ID || '').trim();
 const OPENCLAW_BOT_ID = (process.env.OPENCLAW_BOT_ID || '').trim();
 
-const LEAVE_ON_USER_IDS = (process.env.LEAVE_ON_USER_IDS || '')
-  .split(',')
-  .map((id) => id.trim())
-  .filter(Boolean);
+const LEAVE_ON_USER_IDS = YOUR_USER_ID ? [YOUR_USER_ID] : [];
 
 const FILTER_FILLER = (process.env.FILTER_FILLER || 'true').toLowerCase() === 'true';
 const DEBUG_VC = (process.env.DEBUG_VC || 'false').toLowerCase() === 'true';

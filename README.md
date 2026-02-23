@@ -98,10 +98,7 @@ Behavior:
 - Words **between** are sent as **one combined message**
 
 ### Auto‑join / auto‑leave
-```
-LEAVE_ON_USER_IDS=YOUR_USER_ID
-```
-Bot auto‑joins when you enter VC, and leaves when you leave.
+Auto‑join/leave follows `YOUR_USER_ID` (no separate setting).
 
 ### OpenClaw allowlist (important)
 If your OpenClaw Discord config uses `groupPolicy: "allowlist"`, you must add the **voicebot’s bot user ID** to the allowlist or OpenClaw will ignore its messages.
