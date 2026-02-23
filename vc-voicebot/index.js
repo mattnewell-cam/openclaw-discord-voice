@@ -88,12 +88,12 @@ const TRANSCRIBE_REQUIRE_START = true;
 const TRANSCRIBE_EXACT_MATCH =
   (process.env.TRANSCRIBE_EXACT_MATCH || 'false').toLowerCase() === 'true';
 // NOTE: "stop message" is a common mishear of "start message".
-// Treat it as a START phrase. Only "end message" closes the gate.
+// Treat it as a START phrase. "end message" (and mishear "and message") closes the gate.
 const START_PHRASES = parsePhraseList(
   process.env.TRANSCRIBE_START_PHRASES || 'start message,stop message'
 );
 const STOP_PHRASES = parsePhraseList(
-  process.env.TRANSCRIBE_STOP_PHRASES || 'end message'
+  process.env.TRANSCRIBE_STOP_PHRASES || 'end message,and message'
 );
 
 function logDebug(...args) {
