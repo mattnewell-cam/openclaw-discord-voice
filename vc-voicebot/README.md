@@ -29,7 +29,7 @@ npm start
 - `SPEAK_CHANNEL_ID` → where TTS listens (defaults to TEXT_CHANNEL_ID)
 - `YOUR_USER_ID` → only transcribe this speaker
 - `OPENCLAW_BOT_ID` → only speak this author (your OpenClaw bot)
-- `TRANSCRIBE_REQUIRE_START=true` → enable “start/end message” gating
+- Start/end message gating is **always on**
 
 ## Commands
 - `/join` → join your current VC

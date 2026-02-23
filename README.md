@@ -85,9 +85,8 @@ WHISPER_LANGUAGE=en
 ```
 Smaller model = faster `whisper_ms`.
 
-### Start/stop gating
+### Start/stop gating (always on)
 ```
-TRANSCRIBE_REQUIRE_START=true
 TRANSCRIBE_START_PHRASES=start message,stop message
 TRANSCRIBE_STOP_PHRASES=end message,and message
 TRANSCRIBE_EXACT_MATCH=false

@@ -84,15 +84,14 @@ const FILTER_FILLER = (process.env.FILTER_FILLER || 'true').toLowerCase() === 't
 const DEBUG_VC = (process.env.DEBUG_VC || 'false').toLowerCase() === 'true';
 const TIMING_LOG = (process.env.TIMING_LOG || 'false').toLowerCase() === 'true';
 
-const TRANSCRIBE_REQUIRE_START =
-  (process.env.TRANSCRIBE_REQUIRE_START || 'false').toLowerCase() === 'true';
+const TRANSCRIBE_REQUIRE_START = true;
 const TRANSCRIBE_EXACT_MATCH =
   (process.env.TRANSCRIBE_EXACT_MATCH || 'false').toLowerCase() === 'true';
 const START_PHRASES = parsePhraseList(
-  process.env.TRANSCRIBE_START_PHRASES || (TRANSCRIBE_REQUIRE_START ? 'start message' : '')
+  process.env.TRANSCRIBE_START_PHRASES || 'start message'
 );
 const STOP_PHRASES = parsePhraseList(
-  process.env.TRANSCRIBE_STOP_PHRASES || (TRANSCRIBE_REQUIRE_START ? 'stop message,end message' : '')
+  process.env.TRANSCRIBE_STOP_PHRASES || 'stop message,end message'
 );
 
 function logDebug(...args) {
