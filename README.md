@@ -1,24 +1,22 @@
-# OpenClaw Discord Voice (STT + TTS)
+# OpenClaw Discord Voice (Single Bot STT + TTS)
 
-Two small services that make Discord voice usable with OpenClaw:
+One service, one bot: it joins a VC, transcribes speech to text, and speaks replies back into the VC.
 
-- **vc-transcriber**: joins a voice channel, transcribes with faster‑whisper, posts to a text channel
-- **voice-bridge**: speaks a text channel into voice (Edge TTS or Piper), and relays OpenClaw replies
+- **vc-transcriber/** now does **both** STT + TTS
+- **voice-bridge/** is legacy (two‑bot setup) and can be ignored
 
 ---
 
-## 1) Discord setup (bots + permissions)
+## 1) Discord setup (bot + permissions)
 
-You’ll typically want **two bots** (one for STT, one for TTS). You can reuse one bot, but separating them avoids loops.
-
-### Create bots
+### Create the bot
 1. Go to <https://discord.com/developers/applications>
 2. **New Application** → add a **Bot**
 3. **Enable Message Content Intent** (Bot → Privileged Gateway Intents)
-4. Copy the **Bot Token** (you’ll use it in `.env`)
+4. Copy the **Bot Token**
 
-### Invite bots to your server
-Use the OAuth2 URL generator in the dev portal:
+### Invite the bot to your server
+Use OAuth2 URL generator:
 - Scopes: **bot**
 - Permissions:
   - View Channels
@@ -27,14 +25,11 @@ Use the OAuth2 URL generator in the dev portal:
   - Connect
   - Speak
 
-Repeat for both bots.
-
 ### Get IDs (guild + channels)
-In Discord: **Settings → Advanced → Developer Mode** → ON.
-Right‑click and **Copy ID** for:
+Enable Developer Mode in Discord, then right‑click and **Copy ID**:
 - **Guild/Server ID**
 - **Voice Channel ID**
-- **Text Channel ID** (where transcripts/replies go)
+- **Text Channel ID** (where transcripts go)
 
 ---
 
@@ -44,7 +39,7 @@ Right‑click and **Copy ID** for:
 - Python 3.10+
 - ffmpeg
 
-On Ubuntu:
+Ubuntu:
 ```bash
 sudo apt-get update
 sudo apt-get install -y ffmpeg python3-venv
@@ -52,7 +47,7 @@ sudo apt-get install -y ffmpeg python3-venv
 
 ---
 
-## 3) vc‑transcriber setup (STT)
+## 3) Install + Run (single bot)
 
 ```bash
 cd vc-transcriber
@@ -63,16 +58,28 @@ cp .env.example .env
 npm start
 ```
 
-### Key `.env` values
-- `DISCORD_TOKEN` (transcriber bot token)
-- `GUILD_ID`
-- `VOICE_CHANNEL_ID`
-- `TEXT_CHANNEL_ID`
-- `WHISPER_PYTHON=./.venv/bin/python`
-- `WHISPER_MODEL=tiny|base|small|...` (smaller = faster)
+---
 
-### Gated “start/end message” mode
-Enable:
+## 4) Configuration (.env)
+
+### Core
+```
+DISCORD_TOKEN=
+GUILD_ID=
+VOICE_CHANNEL_ID=
+TEXT_CHANNEL_ID=
+SPEAK_CHANNEL_ID=   # optional; defaults to TEXT_CHANNEL_ID
+```
+
+### STT (Whisper)
+```
+WHISPER_PYTHON=./.venv/bin/python
+WHISPER_MODEL=tiny|base|small|...
+WHISPER_LANGUAGE=en
+```
+Smaller model = faster `whisper_ms`.
+
+### Start/stop gating
 ```
 TRANSCRIBE_REQUIRE_START=true
 TRANSCRIBE_START_PHRASES=start message,stop message
@@ -85,97 +92,53 @@ Behavior:
 - Words **between** are sent as **one combined message**
 
 ### Auto‑join / auto‑leave
-Set your user ID so bots follow you:
 ```
 LEAVE_ON_USER_IDS=YOUR_USER_ID
 ```
-Behavior:
-- When **you join a VC**, bot auto‑joins
-- When **no humans remain**, bot leaves
+Bot auto‑joins when you enter VC, and leaves when you leave.
 
-### Commands (text channel)
-- `/join` → joins your current VC
-- `/beep` → plays two beeps (test audio)
+### TTS (Edge / Piper)
+```
+TTS_PROVIDER=edge
+TTS_PYTHON=./.venv/bin/python
+EDGE_VOICE=en-GB-RyanNeural
+```
+If you use **Piper**:
+```
+TTS_PROVIDER=piper
+PIPER_MODEL=voices/<your-model>.onnx
+PIPER_DATA_DIR=voices
+```
+
+### Author filtering (recommended)
+```bash
+# Only transcribe these VC speakers
+SPEAK_USER_IDS=YOUR_USER_ID
+
+# Only speak these authors in SPEAK_CHANNEL_ID
+TTS_SPEAK_USER_IDS=OPENCLAW_BOT_ID
+ALLOW_BOT_MESSAGES=true
+```
 
 ---
 
-## 4) voice‑bridge setup (TTS)
+## 5) Commands (text channel)
+
+- `/join` → join your current VC
+- `/beep` → play two beeps to confirm audio
+
+---
+
+## 6) Logs + timing
 
 ```bash
-cd voice-bridge
-npm install
-python3 -m venv .venv
-./.venv/bin/pip install edge-tts piper-tts pathvalidate
-cp .env.example .env
-# edit .env
-npm start
-```
-
-### Key `.env` values
-- `DISCORD_TOKEN` (bridge bot token)
-- `GUILD_ID`
-- `VOICE_CHANNEL_ID`
-- `TEXT_CHANNEL_ID`
-
-### TTS provider
-- **Edge (default)**:
-  - `TTS_PROVIDER=edge`
-  - `EDGE_VOICE=en-GB-RyanNeural` (or any Edge voice)
-- **Piper**:
-  - `TTS_PROVIDER=piper`
-  - `PIPER_MODEL=voices/<your-model>.onnx`
-  - Optional: `PIPER_SPEAKER`, `PIPER_LENGTH_SCALE`, etc.
-
-### Single‑channel setup (recommended)
-If you want **one channel** for transcripts + replies:
-```
-TEXT_CHANNEL_ID=<same channel>
-TRANSCRIBE_CHANNEL_ID=
-REPLY_CHANNEL_ID=
-```
-Then restrict who gets spoken:
-```
-SPEAK_USER_IDS=<OpenClawBotID>
-IGNORE_USER_IDS=<TranscriberBotID>
-```
-This prevents the bridge from reading the transcriber’s output aloud.
-
----
-
-## 5) OpenClaw integration (optional)
-
-If OpenClaw is replying in the same Discord channel, ensure:
-- That channel allows bot messages
-- You set a **system prompt** appropriate for voice transcripts
-
-Example (OpenClaw config):
-```
-"systemPrompt": "You are the voice transcribe assistant. Respond only to clear, direct questions or requests..."
-```
-
----
-
-## 6) Running + logs
-
-Start in background with logs:
-```bash
-# vc-transcriber
-cd vc-transcriber
+# start in background
 nohup npm start >> /tmp/vc-transcriber.log 2>&1 &
 
-# voice-bridge
-cd voice-bridge
-nohup npm start >> /tmp/voice-bridge.log 2>&1 &
-```
-
-Tail logs:
-```bash
+# follow logs
 tail -f /tmp/vc-transcriber.log
-tail -f /tmp/voice-bridge.log
-```
 
-Timing stats (vc‑transcriber):
-```bash
+# timing stats
 grep -n "\[timing\]" /tmp/vc-transcriber.log | tail -n 20
 ```
 
@@ -184,26 +147,21 @@ grep -n "\[timing\]" /tmp/vc-transcriber.log | tail -n 20
 ## 7) Troubleshooting
 
 **No transcripts:**
-- Check bot is in the correct VC
-- Check permissions (Connect, Speak, Message Content intent)
-- Ensure the bot is **not deafened**
-- Check `.env` IDs
+- Bot is in the correct VC
+- Message Content intent enabled
+- Bot not deafened
+- IDs are correct
 
-**Beep not audible:**
-- Right‑click bot in VC → **User Volume**
-- Ensure you’re not **deafened**
-- Confirm your Discord output device
+**No TTS audio:**
+- Bot has **Speak** permission
+- Your Discord output device isn’t muted
+- Bot user volume isn’t at 0%
 
-**Crash on opus decode:**
-- Use `@discordjs/opus` (not `opusscript`)
+**Opus decode crashes:**
+- Use `@discordjs/opus` (already in package.json)
 
 ---
 
 ## Repo layout
-- `vc-transcriber/`
-- `voice-bridge/`
-
-## Notes
-- **No secrets are committed**. Use `.env` locally.
-- If you only want STT, you only need `vc-transcriber`.
-- If you only want TTS/replies, you only need `voice-bridge`.
+- `vc-transcriber/` → **single‑bot STT + TTS**
+- `voice-bridge/` → legacy two‑bot bridge (optional)

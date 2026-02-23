@@ -1,6 +1,8 @@
-# VC Transcriber (Discord)
+# VC Transcriber (Single Bot STT + TTS)
 
-Joins a Discord voice channel, captures audio, transcribes with **faster-whisper**, and posts text to a channel.
+One Discord bot that:
+- **Transcribes** VC speech → text channel
+- **Speaks** replies from a text channel → VC (Edge or Piper TTS)
 
 ## Requirements
 - Node.js 18+
@@ -9,24 +11,30 @@ Joins a Discord voice channel, captures audio, transcribes with **faster-whisper
 
 ## Setup
 ```bash
-cd /home/matth/.openclaw/workspace/vc-transcriber
+cd vc-transcriber
 npm install
 ./scripts/setup.sh
 cp .env.example .env
 ```
 
-Fill `.env` with your bot token + channel IDs.
+Fill `.env` with your bot token + IDs.
 
 ## Run
 ```bash
 npm start
 ```
 
+## Key config highlights
+- `TEXT_CHANNEL_ID` → where transcripts are posted
+- `SPEAK_CHANNEL_ID` → where TTS listens (defaults to TEXT_CHANNEL_ID)
+- `SPEAK_USER_IDS` → only transcribe these speakers
+- `TTS_SPEAK_USER_IDS` → only speak these authors (e.g., OpenClaw bot ID)
+- `TRANSCRIBE_REQUIRE_START=true` → enable “start/end message” gating
+
+## Commands
+- `/join` → join your current VC
+- `/beep` → play two beeps
+
 ## Notes
-- `WHISPER_MODEL=small` is a good accuracy/speed balance on CPU.
-- If you have a GPU, set `WHISPER_DEVICE=cuda` and `WHISPER_COMPUTE_TYPE=float16`.
-- Optional start/stop gating:
-  - Set `TRANSCRIBE_REQUIRE_START=true`
-  - (Optional) `TRANSCRIBE_EXACT_MATCH=true` to only match whole phrases
-  - Set `TRANSCRIBE_START_PHRASES=start message`
-  - Set `TRANSCRIBE_STOP_PHRASES=stop message,end message`
+- `WHISPER_MODEL=tiny` is fastest; `base/small` is more accurate.
+- Start/stop phrases match **inside** longer transcripts.

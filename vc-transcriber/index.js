@@ -8,6 +8,7 @@ import {
   AudioPlayerStatus,
   VoiceConnectionStatus,
   entersState,
+  StreamType,
 } from '@discordjs/voice';
 import { EndBehaviorType } from '@discordjs/voice';
 import { spawn } from 'node:child_process';
@@ -35,6 +36,7 @@ const TOKEN = process.env.DISCORD_TOKEN;
 const GUILD_ID = process.env.GUILD_ID;
 const VOICE_CHANNEL_ID = process.env.VOICE_CHANNEL_ID;
 const TEXT_CHANNEL_ID = process.env.TEXT_CHANNEL_ID;
+const SPEAK_CHANNEL_ID = process.env.SPEAK_CHANNEL_ID || process.env.REPLY_CHANNEL_ID || TEXT_CHANNEL_ID;
 
 let currentVoiceChannelId = VOICE_CHANNEL_ID;
 
@@ -47,14 +49,34 @@ const WHISPER_COMPUTE_TYPE = process.env.WHISPER_COMPUTE_TYPE || 'int8';
 const SILENCE_DURATION_MS = Number(process.env.SILENCE_DURATION_MS || 800);
 const MIN_SPEECH_MS = Number(process.env.MIN_SPEECH_MS || 600);
 
-const SPEAK_USER_IDS = (process.env.SPEAK_USER_IDS || '')
-  .split(',')
-  .map((id) => id.trim())
-  .filter(Boolean);
-const IGNORE_USER_IDS = (process.env.IGNORE_USER_IDS || '')
-  .split(',')
-  .map((id) => id.trim())
-  .filter(Boolean);
+const BEEP_DURATION = Number(process.env.BEEP_DURATION || 0.35);
+const BEEP_AMPLITUDE = Number(process.env.BEEP_AMPLITUDE || 0.9);
+const BEEP_VERSION = 'v2';
+
+const TTS_PROVIDER = (process.env.TTS_PROVIDER || 'edge').toLowerCase();
+const TTS_PYTHON = process.env.TTS_PYTHON || './.venv/bin/python';
+
+const EDGE_VOICE = process.env.EDGE_VOICE || 'en-GB-RyanNeural';
+const EDGE_RATE = process.env.EDGE_RATE || '+0%';
+const EDGE_PITCH = process.env.EDGE_PITCH || '+0Hz';
+const EDGE_VOLUME = process.env.EDGE_VOLUME || '+0%';
+
+const PIPER_MODEL = process.env.PIPER_MODEL || '';
+const PIPER_DATA_DIR = process.env.PIPER_DATA_DIR || 'voices';
+const PIPER_SPEAKER = process.env.PIPER_SPEAKER || '';
+const PIPER_LENGTH_SCALE = process.env.PIPER_LENGTH_SCALE || '';
+const PIPER_NOISE_SCALE = process.env.PIPER_NOISE_SCALE || '';
+const PIPER_NOISE_W_SCALE = process.env.PIPER_NOISE_W_SCALE || '';
+const PIPER_SENTENCE_SILENCE = process.env.PIPER_SENTENCE_SILENCE || '';
+
+const MAX_CHUNK = Number(process.env.MAX_CHUNK || 400);
+const ALLOW_BOT_MESSAGES = (process.env.ALLOW_BOT_MESSAGES || 'true').toLowerCase() === 'true';
+
+const SPEAK_USER_IDS = parseIdList(process.env.SPEAK_USER_IDS || '');
+const IGNORE_USER_IDS = parseIdList(process.env.IGNORE_USER_IDS || '');
+
+const TTS_SPEAK_USER_IDS = parseIdList(process.env.TTS_SPEAK_USER_IDS || '');
+const TTS_IGNORE_USER_IDS = parseIdList(process.env.TTS_IGNORE_USER_IDS || '');
 
 const LEAVE_ON_USER_IDS = (process.env.LEAVE_ON_USER_IDS || '')
   .split(',')
@@ -63,6 +85,7 @@ const LEAVE_ON_USER_IDS = (process.env.LEAVE_ON_USER_IDS || '')
 
 const FILTER_FILLER = (process.env.FILTER_FILLER || 'true').toLowerCase() === 'true';
 const DEBUG_VC = (process.env.DEBUG_VC || 'false').toLowerCase() === 'true';
+const TIMING_LOG = (process.env.TIMING_LOG || 'false').toLowerCase() === 'true';
 
 const TRANSCRIBE_REQUIRE_START =
   (process.env.TRANSCRIBE_REQUIRE_START || 'false').toLowerCase() === 'true';
@@ -77,6 +100,10 @@ const STOP_PHRASES = parsePhraseList(
 
 function logDebug(...args) {
   if (DEBUG_VC) console.log('[vc]', ...args);
+}
+
+function logTiming(...args) {
+  if (TIMING_LOG) console.log('[timing]', ...args);
 }
 
 function normalizePhrase(input) {
@@ -94,19 +121,35 @@ function parsePhraseList(value) {
     .filter(Boolean);
 }
 
+function parseIdList(value) {
+  return String(value || '')
+    .split(',')
+    .map((id) => id.trim())
+    .filter(Boolean);
+}
+
 function escapeRegex(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-function matchesPhrase(normalizedText, phrases) {
-  if (!normalizedText || phrases.length === 0) return false;
-  return phrases.some((phrase) => {
-    if (TRANSCRIBE_EXACT_MATCH) {
-      return normalizedText === phrase;
-    }
-    const re = new RegExp(`\\b${escapeRegex(phrase)}\\b`, 'i');
-    return re.test(normalizedText);
-  });
+function phraseRegex(phrase) {
+  const parts = phrase.split(/\s+/).map(escapeRegex).filter(Boolean);
+  return new RegExp(`\\b${parts.join('\\W+')}\\b`, 'i');
+}
+
+function findPhraseInText(text, phrases, { requireStart = false } = {}) {
+  if (!text || phrases.length === 0) return null;
+
+  for (const phrase of phrases) {
+    const re = phraseRegex(phrase);
+    const match = text.match(re);
+    if (!match) continue;
+    if (requireStart && match.index !== 0) continue;
+    const before = text.slice(0, match.index).trim();
+    const after = text.slice(match.index + match[0].length).trim();
+    return { phrase, before, after, match };
+  }
+  return null;
 }
 
 const client = new Client({
@@ -124,6 +167,8 @@ let wantConnected = true;
 const activeStreams = new Map();
 let gateOpen = !TRANSCRIBE_REQUIRE_START;
 let messageBuffer = '';
+const ttsQueue = [];
+let ttsPlaying = false;
 
 function isFillerMessage(text) {
   const tokens = text
@@ -135,6 +180,159 @@ function isFillerMessage(text) {
   if (tokens.length === 0) return true;
 
   return tokens.every((token) => /^(m+|ah+|oh+|yeah+)$/.test(token));
+}
+
+function normalizeText(text) {
+  return String(text || '')
+    .replace(/\r\n/g, '\n')
+    .replace(/\n+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function splitText(text) {
+  const clean = normalizeText(text);
+  if (!clean) return [];
+
+  if (clean.length <= MAX_CHUNK) return [clean];
+
+  const chunks = [];
+  let start = 0;
+  while (start < clean.length) {
+    chunks.push(clean.slice(start, start + MAX_CHUNK).trim());
+    start += MAX_CHUNK;
+  }
+
+  return chunks.filter(Boolean);
+}
+
+function sanitizeForSpeech(text) {
+  if (!text) return '';
+
+  let out = text;
+
+  // Replace markdown links [text](url) -> text
+  out = out.replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1');
+
+  // Strip URLs
+  out = out.replace(/https?:\/\/\S+/gi, '');
+
+  // Remove common markdown tokens
+  out = out.replace(/[\*_`~>|]/g, '');
+
+  return normalizeText(out);
+}
+
+function synthesizePiper(text, outFile) {
+  return new Promise((resolve, reject) => {
+    if (!PIPER_MODEL) return reject(new Error('PIPER_MODEL is not set'));
+
+    const args = [
+      '-m',
+      'piper',
+      '-m',
+      PIPER_MODEL,
+      '--data-dir',
+      PIPER_DATA_DIR,
+    ];
+
+    if (PIPER_SPEAKER) args.push('--speaker', PIPER_SPEAKER);
+    if (PIPER_LENGTH_SCALE) args.push('--length-scale', PIPER_LENGTH_SCALE);
+    if (PIPER_NOISE_SCALE) args.push('--noise-scale', PIPER_NOISE_SCALE);
+    if (PIPER_NOISE_W_SCALE) args.push('--noise-w-scale', PIPER_NOISE_W_SCALE);
+    if (PIPER_SENTENCE_SILENCE) args.push('--sentence-silence', PIPER_SENTENCE_SILENCE);
+
+    args.push('-f', outFile, '--', text);
+
+    const proc = spawn(TTS_PYTHON, args, { stdio: ['ignore', 'inherit', 'inherit'] });
+    proc.on('error', reject);
+    proc.on('exit', (code) => {
+      if (code === 0) resolve();
+      else reject(new Error(`piper exited with code ${code}`));
+    });
+  });
+}
+
+function synthesizeEdge(text, outFile) {
+  return new Promise((resolve, reject) => {
+    const args = [
+      '-m',
+      'edge_tts',
+      '--voice',
+      EDGE_VOICE,
+      '--rate',
+      EDGE_RATE,
+      '--pitch',
+      EDGE_PITCH,
+      '--volume',
+      EDGE_VOLUME,
+      '--text',
+      text,
+      '--write-media',
+      outFile,
+    ];
+
+    const proc = spawn(TTS_PYTHON, args, { stdio: ['ignore', 'inherit', 'inherit'] });
+    proc.on('error', reject);
+    proc.on('exit', (code) => {
+      if (code === 0) resolve();
+      else reject(new Error(`edge-tts exited with code ${code}`));
+    });
+  });
+}
+
+function synthesize(text, outFile) {
+  if (TTS_PROVIDER === 'piper') return synthesizePiper(text, outFile);
+  return synthesizeEdge(text, outFile);
+}
+
+async function playNextTts() {
+  if (ttsPlaying || ttsQueue.length === 0) return;
+  if (!player) return;
+
+  ttsPlaying = true;
+
+  const text = ttsQueue.shift();
+  const ext = TTS_PROVIDER === 'piper' ? 'wav' : 'mp3';
+  const filePath = path.join(
+    tmpdir(),
+    `tts-${Date.now()}-${Math.random().toString(16).slice(2)}.${ext}`
+  );
+
+  try {
+    await synthesize(text, filePath);
+    const resource = createAudioResource(filePath, { inputType: StreamType.Arbitrary });
+    player.play(resource);
+
+    player.once(AudioPlayerStatus.Idle, async () => {
+      await fs.unlink(filePath).catch(() => {});
+      ttsPlaying = false;
+      playNextTts();
+    });
+  } catch (err) {
+    console.error('TTS failed:', err);
+    await fs.unlink(filePath).catch(() => {});
+    ttsPlaying = false;
+    playNextTts();
+  }
+}
+
+async function enqueueTts(text) {
+  for (const chunk of splitText(text)) {
+    ttsQueue.push(chunk);
+  }
+
+  if (!player && wantConnected) {
+    try {
+      await connectVoice();
+    } catch (err) {
+      console.error('TTS connect failed:', err);
+      return;
+    }
+  }
+
+  if (!player) return;
+  await playNextTts();
 }
 
 async function transcribeFile(wavPath) {
@@ -168,7 +366,7 @@ async function transcribeFile(wavPath) {
   });
 }
 
-async function ensureBeep(filePath, frequency = 880, duration = 0.18) {
+async function ensureBeep(filePath, frequency = 880, duration = BEEP_DURATION, amplitude = BEEP_AMPLITUDE) {
   try {
     await fs.access(filePath);
     return;
@@ -180,7 +378,9 @@ async function ensureBeep(filePath, frequency = 880, duration = 0.18) {
       '-f',
       'lavfi',
       '-i',
-      `sine=frequency=${frequency}:duration=${duration}`,
+      `sine=frequency=${frequency}:duration=${duration}:sample_rate=48000`,
+      '-filter:a',
+      `volume=${amplitude}`,
       '-ac',
       '1',
       '-ar',
@@ -200,7 +400,10 @@ async function ensureBeep(filePath, frequency = 880, duration = 0.18) {
 async function playBeep(frequency) {
   if (!player) return;
 
-  const filePath = path.join(tmpdir(), `vc-beep-${frequency}.wav`);
+  const filePath = path.join(
+    tmpdir(),
+    `vc-beep-${frequency}-${Math.round(BEEP_DURATION * 1000)}-${Math.round(BEEP_AMPLITUDE * 100)}-${BEEP_VERSION}.wav`
+  );
   try {
     await ensureBeep(filePath, frequency);
   } catch (err) {
@@ -226,6 +429,9 @@ async function handleUserStream(userId, stream) {
 
   logDebug('speaking start', userId);
 
+  const t0 = Date.now();
+  let captureMs = 0;
+
   const rawPath = path.join(
     tmpdir(),
     `vc-${userId}-${Date.now()}-${Math.random().toString(16).slice(2)}.raw`
@@ -241,6 +447,7 @@ async function handleUserStream(userId, stream) {
 
   try {
     await pipeline(stream, decoder, writeStream);
+    captureMs = Date.now() - t0;
   } catch (err) {
     console.error('Audio pipeline failed:', err);
     await cleanupFiles(rawPath, wavPath);
@@ -248,15 +455,22 @@ async function handleUserStream(userId, stream) {
   }
 
   try {
+    const tProbe = Date.now();
     const durationMs = await getAudioDurationMs(rawPath);
+    const probeMs = Date.now() - tProbe;
     logDebug('segment duration', userId, `${Math.round(durationMs)}ms`);
     if (durationMs < MIN_SPEECH_MS) {
       await cleanupFiles(rawPath, wavPath);
       return;
     }
 
+    const tConvert = Date.now();
     await convertToWav(rawPath, wavPath);
+    const convertMs = Date.now() - tConvert;
+
+    const tWhisper = Date.now();
     const transcript = await transcribeFile(wavPath);
+    const whisperMs = Date.now() - tWhisper;
     logDebug('transcript', userId, transcript);
 
     if (!transcript) {
@@ -264,21 +478,48 @@ async function handleUserStream(userId, stream) {
       return;
     }
 
-    const normalized = normalizePhrase(transcript);
+    const spoken = transcript.trim();
+    if (!spoken) {
+      await cleanupFiles(rawPath, wavPath);
+      return;
+    }
 
     if (TRANSCRIBE_REQUIRE_START) {
+      const startMatch = findPhraseInText(spoken, START_PHRASES);
+      const stopMatch = findPhraseInText(spoken, STOP_PHRASES);
+
       if (!gateOpen) {
-        if (matchesPhrase(normalized, START_PHRASES)) {
+        if (startMatch) {
           gateOpen = true;
           messageBuffer = '';
           logDebug('gate open', userId, transcript);
           await playBeep(880);
+          logTiming({
+            event: 'start',
+            userId,
+            capture_ms: captureMs,
+            probe_ms: probeMs,
+            convert_ms: convertMs,
+            whisper_ms: whisperMs,
+            total_ms: Date.now() - t0,
+            transcript: spoken.slice(0, 80),
+          });
+
+          if (startMatch.after && !(FILTER_FILLER && isFillerMessage(startMatch.after))) {
+            messageBuffer = startMatch.after;
+          }
+        } else if (DEBUG_VC) {
+          console.log('[vc] start-match-miss', transcript);
         }
         await cleanupFiles(rawPath, wavPath);
         return;
       }
 
-      if (matchesPhrase(normalized, STOP_PHRASES)) {
+      if (stopMatch) {
+        if (stopMatch.before && !(FILTER_FILLER && isFillerMessage(stopMatch.before))) {
+          messageBuffer = messageBuffer ? `${messageBuffer} ${stopMatch.before}` : stopMatch.before;
+        }
+
         gateOpen = false;
         logDebug('gate closed', userId, transcript);
         await playBeep(660);
@@ -286,33 +527,84 @@ async function handleUserStream(userId, stream) {
         const payload = messageBuffer.trim();
         messageBuffer = '';
 
+        let sendMs = 0;
         if (payload) {
           const channel = await client.channels.fetch(TEXT_CHANNEL_ID);
           if (channel && channel.isTextBased()) {
+            const tSend = Date.now();
             await channel.send(payload);
+            sendMs = Date.now() - tSend;
           }
         }
 
+        logTiming({
+          event: 'stop',
+          userId,
+          capture_ms: captureMs,
+          probe_ms: probeMs,
+          convert_ms: convertMs,
+          whisper_ms: whisperMs,
+          send_ms: sendMs,
+          total_ms: Date.now() - t0,
+          transcript: spoken.slice(0, 80),
+        });
+
+        await cleanupFiles(rawPath, wavPath);
+        return;
+      }
+
+      if (startMatch) {
+        messageBuffer = '';
+        logDebug('gate restart', userId, transcript);
+        await playBeep(880);
+        if (startMatch.after && !(FILTER_FILLER && isFillerMessage(startMatch.after))) {
+          messageBuffer = startMatch.after;
+        }
         await cleanupFiles(rawPath, wavPath);
         return;
       }
     }
 
-    if (FILTER_FILLER && isFillerMessage(transcript)) {
+    if (FILTER_FILLER && isFillerMessage(spoken)) {
       await cleanupFiles(rawPath, wavPath);
       return;
     }
 
     if (TRANSCRIBE_REQUIRE_START) {
-      messageBuffer = messageBuffer ? `${messageBuffer} ${transcript}` : transcript;
+      messageBuffer = messageBuffer ? `${messageBuffer} ${spoken}` : spoken;
+      logTiming({
+        event: 'buffer',
+        userId,
+        capture_ms: captureMs,
+        probe_ms: probeMs,
+        convert_ms: convertMs,
+        whisper_ms: whisperMs,
+        total_ms: Date.now() - t0,
+        transcript: spoken.slice(0, 80),
+      });
       await cleanupFiles(rawPath, wavPath);
       return;
     }
 
     const channel = await client.channels.fetch(TEXT_CHANNEL_ID);
+    let sendMs = 0;
     if (channel && channel.isTextBased()) {
-      await channel.send(transcript);
+      const tSend = Date.now();
+      await channel.send(spoken);
+      sendMs = Date.now() - tSend;
     }
+
+    logTiming({
+      event: 'send',
+      userId,
+      capture_ms: captureMs,
+      probe_ms: probeMs,
+      convert_ms: convertMs,
+      whisper_ms: whisperMs,
+      send_ms: sendMs,
+      total_ms: Date.now() - t0,
+      transcript: spoken.slice(0, 80),
+    });
   } catch (err) {
     console.error('Transcription failed:', err);
   } finally {
@@ -370,6 +662,8 @@ async function cleanupFiles(...pathsToRemove) {
 
 async function connectVoice() {
   wantConnected = true;
+  gateOpen = !TRANSCRIBE_REQUIRE_START;
+  messageBuffer = '';
   if (!currentVoiceChannelId) {
     throw new Error('VOICE_CHANNEL_ID is not set');
   }
@@ -449,34 +743,76 @@ client.once('ready', async () => {
 });
 
 client.on('messageCreate', async (message) => {
-  if (message.author.bot) return;
   if (message.guildId !== GUILD_ID) return;
-  if (!message.content || message.content.trim() !== '/join') return;
+  if (!message.content) return;
 
-  const voiceChannel = message.member?.voice?.channel;
-  if (!voiceChannel || !voiceChannel.isVoiceBased()) {
-    await message.reply('Join a voice channel first.');
+  const content = message.content.trim();
+
+  if (content === '/join') {
+    if (message.author.bot) return;
+    const voiceChannel = message.member?.voice?.channel;
+    if (!voiceChannel || !voiceChannel.isVoiceBased()) {
+      await message.reply('Join a voice channel first.');
+      return;
+    }
+
+    currentVoiceChannelId = voiceChannel.id;
+    wantConnected = true;
+    try {
+      connection?.destroy();
+    } catch {}
+    connection = null;
+    await connectVoice();
+    await message.reply(`Joined ${voiceChannel.name}.`);
     return;
   }
 
-  currentVoiceChannelId = voiceChannel.id;
-  wantConnected = true;
-  try {
-    connection?.destroy();
-  } catch {}
-  connection = null;
-  await connectVoice();
-  await message.reply(`Joined ${voiceChannel.name}.`);
+  if (content === '/beep') {
+    if (message.author.bot) return;
+    const voiceChannel = message.member?.voice?.channel;
+    if (!voiceChannel || !voiceChannel.isVoiceBased()) {
+      await message.reply('Join a voice channel first.');
+      return;
+    }
+
+    if (!connection || currentVoiceChannelId !== voiceChannel.id) {
+      currentVoiceChannelId = voiceChannel.id;
+      wantConnected = true;
+      try {
+        connection?.destroy();
+      } catch {}
+      connection = null;
+      await connectVoice();
+    }
+
+    await playBeep(880);
+    await playBeep(660);
+    await message.reply('Beep.');
+    return;
+  }
+
+  if (message.channelId !== SPEAK_CHANNEL_ID) return;
+  if (message.author?.id === client.user?.id) return;
+  if (!ALLOW_BOT_MESSAGES && message.author.bot) return;
+  if (TTS_IGNORE_USER_IDS.includes(message.author.id)) return;
+  if (TTS_SPEAK_USER_IDS.length > 0 && !TTS_SPEAK_USER_IDS.includes(message.author.id)) return;
+  if (!content) return;
+
+  const spoken = sanitizeForSpeech(content);
+  if (!spoken) return;
+
+  await enqueueTts(spoken);
 });
 
 client.on('voiceStateUpdate', async (oldState, newState) => {
   if (
     newState.channelId &&
     LEAVE_ON_USER_IDS.includes(newState.id) &&
-    newState.channelId !== currentVoiceChannelId
+    (newState.channelId !== currentVoiceChannelId || !connection || !wantConnected)
   ) {
     currentVoiceChannelId = newState.channelId;
     wantConnected = true;
+    if (DEBUG_VC) console.log('[vc] auto-join', newState.channelId);
     try {
       connection?.destroy();
     } catch {}
@@ -493,6 +829,8 @@ client.on('voiceStateUpdate', async (oldState, newState) => {
     LEAVE_ON_USER_IDS.includes(oldState.id)
   ) {
     wantConnected = false;
+    gateOpen = false;
+    messageBuffer = '';
     try {
       connection?.destroy();
     } catch {}
@@ -516,6 +854,8 @@ client.on('voiceStateUpdate', async (oldState, newState) => {
   if (humans.size > 0) return;
 
   wantConnected = false;
+  gateOpen = false;
+  messageBuffer = '';
   console.log('[vc] leaving (no humans)');
   try {
     connection?.destroy();
