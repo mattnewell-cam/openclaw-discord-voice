@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 import argparse
-import asyncio
+import subprocess
 import sys
-import edge_tts
 
 VOICE = "en-GB-RyanNeural"
 RATE = "+0%"
@@ -17,20 +16,26 @@ def parse_args():
     return parser.parse_args()
 
 
-async def run(text: str, out_path: str):
-    communicate = edge_tts.Communicate(
-        text,
-        VOICE,
-        rate=RATE,
-        pitch=PITCH,
-        volume=VOLUME,
-    )
-    await communicate.save(out_path)
-
-
 def main():
     args = parse_args()
-    asyncio.run(run(args.text, args.out))
+    cmd = [
+        sys.executable,
+        "-m",
+        "edge_tts",
+        "--voice",
+        VOICE,
+        "--rate",
+        RATE,
+        "--pitch",
+        PITCH,
+        "--volume",
+        VOLUME,
+        "--text",
+        args.text,
+        "--write-media",
+        args.out,
+    ]
+    subprocess.run(cmd, check=True)
 
 
 if __name__ == "__main__":
