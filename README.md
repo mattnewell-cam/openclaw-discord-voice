@@ -1,38 +1,31 @@
-# OpenClaw Discord Voice (Single Bot STT + TTS)
+# OpenClaw Voice Chat in Discord
 
-One service, one bot: it joins a VC, transcribes speech to text, and speaks replies back into the VC.
+Openclaw is finally hands-free! This bot joins a specified voice chat when you do, transcribes your speech to text in a chat with Openclaw, then reads Openclaw's response back to you. 
 
 - **vc-transcriber/** does **both** STT + TTS
 
 ---
 
-## 1) Discord setup (bot + permissions)
+## Setup
 
-### Create the bot
+### 1) Create the bot and invite to server
+
 1. Go to <https://discord.com/developers/applications>
 2. **New Application** → add a **Bot**
-3. **Enable Message Content Intent** (Bot → Privileged Gateway Intents)
-4. Copy the **Bot Token**
-
-### Invite the bot to your server
-Use OAuth2 URL generator:
-- Scopes: **bot**
-- Permissions:
-  - View Channels
-  - Read Message History
-  - Send Messages
-  - Connect
-  - Speak
-
-### Get IDs (guild + channels)
-Enable Developer Mode in Discord, then right‑click and **Copy ID**:
-- **Guild/Server ID**
-- **Voice Channel ID**
-- **Text Channel ID** (where transcripts go)
-
+3. Reset the **Bot Token** and copy it
+4. Sidebar → Bot → **Enable Message Content Intent**
+5. Sidebar → OAuth2 → Scopes: **bot**
+6. Scroll down to Bot Permissions → select:
+  - **View Channels**
+  - **Read Message History**
+  - **Send Messages**
+  - **Connect**
+  - **Speak**
+7. Scroll down → **copy URL**
+8. Go to URL, authorise, and add it to your server
 ---
 
-## 2) Requirements
+### 2) Requirements
 
 - Node.js 18+
 - Python 3.10+
@@ -46,7 +39,7 @@ sudo apt-get install -y ffmpeg python3-venv
 
 ---
 
-## 3) Install + Run (single bot)
+### 3) Install + Run (single bot)
 
 ```bash
 cd vc-transcriber
@@ -59,7 +52,7 @@ npm start
 
 ---
 
-## 4) Configuration (.env)
+### 4) Configuration (.env)
 
 ### Core
 ```
