@@ -110,14 +110,12 @@ If your OpenClaw Discord config uses `groupPolicy: "allowlist"`, you must add th
 ```
 TTS_PROVIDER=edge
 TTS_PYTHON=./.venv/bin/python
-EDGE_VOICE=en-GB-RyanNeural
 ```
 If you use **Piper**:
 ```
 TTS_PROVIDER=piper
-PIPER_MODEL=voices/<your-model>.onnx
-PIPER_DATA_DIR=voices
 ```
+Defaults for voice/model live in `vc-voicebot/scripts/edge_tts.py` and `vc-voicebot/scripts/piper_tts.py`.
 
 ### Filtering (recommended)
 - `YOUR_USER_ID` → only transcribe your voice

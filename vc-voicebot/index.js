@@ -56,20 +56,7 @@ const BEEP_VERSION = 'v2';
 const TTS_PROVIDER = (process.env.TTS_PROVIDER || 'edge').toLowerCase();
 const TTS_PYTHON = process.env.TTS_PYTHON || './.venv/bin/python';
 
-const EDGE_VOICE = process.env.EDGE_VOICE || 'en-GB-RyanNeural';
-const EDGE_RATE = process.env.EDGE_RATE || '+0%';
-const EDGE_PITCH = process.env.EDGE_PITCH || '+0Hz';
-const EDGE_VOLUME = process.env.EDGE_VOLUME || '+0%';
-
-const PIPER_MODEL = process.env.PIPER_MODEL || '';
-const PIPER_DATA_DIR = process.env.PIPER_DATA_DIR || 'voices';
-const PIPER_SPEAKER = process.env.PIPER_SPEAKER || '';
-const PIPER_LENGTH_SCALE = process.env.PIPER_LENGTH_SCALE || '';
-const PIPER_NOISE_SCALE = process.env.PIPER_NOISE_SCALE || '';
-const PIPER_NOISE_W_SCALE = process.env.PIPER_NOISE_W_SCALE || '';
-const PIPER_SENTENCE_SILENCE = process.env.PIPER_SENTENCE_SILENCE || '';
-
-const MAX_CHUNK = Number(process.env.MAX_CHUNK || 400);
+const MAX_CHUNK = 400;
 const ALLOW_BOT_MESSAGES = (process.env.ALLOW_BOT_MESSAGES || 'true').toLowerCase() === 'true';
 
 const YOUR_USER_ID = (process.env.YOUR_USER_ID || '').trim();
@@ -217,24 +204,7 @@ function sanitizeForSpeech(text) {
 
 function synthesizePiper(text, outFile) {
   return new Promise((resolve, reject) => {
-    if (!PIPER_MODEL) return reject(new Error('PIPER_MODEL is not set'));
-
-    const args = [
-      '-m',
-      'piper',
-      '-m',
-      PIPER_MODEL,
-      '--data-dir',
-      PIPER_DATA_DIR,
-    ];
-
-    if (PIPER_SPEAKER) args.push('--speaker', PIPER_SPEAKER);
-    if (PIPER_LENGTH_SCALE) args.push('--length-scale', PIPER_LENGTH_SCALE);
-    if (PIPER_NOISE_SCALE) args.push('--noise-scale', PIPER_NOISE_SCALE);
-    if (PIPER_NOISE_W_SCALE) args.push('--noise-w-scale', PIPER_NOISE_W_SCALE);
-    if (PIPER_SENTENCE_SILENCE) args.push('--sentence-silence', PIPER_SENTENCE_SILENCE);
-
-    args.push('-f', outFile, '--', text);
+    const args = [path.join('scripts', 'piper_tts.py'), '--text', text, '--out', outFile];
 
     const proc = spawn(TTS_PYTHON, args, { stdio: ['ignore', 'inherit', 'inherit'] });
     proc.on('error', reject);
@@ -247,22 +217,7 @@ function synthesizePiper(text, outFile) {
 
 function synthesizeEdge(text, outFile) {
   return new Promise((resolve, reject) => {
-    const args = [
-      '-m',
-      'edge_tts',
-      '--voice',
-      EDGE_VOICE,
-      '--rate',
-      EDGE_RATE,
-      '--pitch',
-      EDGE_PITCH,
-      '--volume',
-      EDGE_VOLUME,
-      '--text',
-      text,
-      '--write-media',
-      outFile,
-    ];
+    const args = [path.join('scripts', 'edge_tts.py'), '--text', text, '--out', outFile];
 
     const proc = spawn(TTS_PYTHON, args, { stdio: ['ignore', 'inherit', 'inherit'] });
     proc.on('error', reject);
