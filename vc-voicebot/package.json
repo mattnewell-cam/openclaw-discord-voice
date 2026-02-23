@@ -1,9 +1,9 @@
 {
-  "name": "vc-transcriber",
+  "name": "vc-voicebot",
   "version": "0.1.0",
   "type": "module",
   "private": true,
-  "description": "Discord VC -> text transcription bot (faster-whisper)",
+  "description": "Discord VC voicebot (STT + TTS)",
   "scripts": {
     "start": "node index.js"
   },

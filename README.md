@@ -1,8 +1,8 @@
-# OpenClaw Voice Chat in Discord
+# OpenClaw Voicebot for Discord
 
 Openclaw is finally hands-free! This bot joins a specified voice chat when you do, transcribes your speech to text in a chat with Openclaw, then reads Openclaw's response back to you. 
 
-- **vc-transcriber/** does **both** STT + TTS
+- **vc-voicebot/** does **both** STT + TTS
 
 ---
 
@@ -42,7 +42,7 @@ sudo apt-get install -y ffmpeg python3-venv
 ### 3) Install (single bot)
 
 ```bash
-cd openclaw-discord-voice/vc-transcriber
+cd openclaw-discord-voicebot/vc-voicebot
 
 npm install
 ./scripts/setup.sh
@@ -116,7 +116,7 @@ ALLOW_BOT_MESSAGES=true
 ## 5) Run
 
 ```bash
-# run from vc-transcriber/
+# run from vc-voicebot/
 npm start
 ```
 
@@ -146,13 +146,13 @@ Notes:
 
 ```bash
 # start in background
-nohup npm start >> /tmp/vc-transcriber.log 2>&1 &
+nohup npm start >> /tmp/vc-voicebot.log 2>&1 &
 
 # follow logs
-tail -f /tmp/vc-transcriber.log
+tail -f /tmp/vc-voicebot.log
 
 # timing stats
-grep -n "\[timing\]" /tmp/vc-transcriber.log | tail -n 20
+grep -n "\[timing\]" /tmp/vc-voicebot.log | tail -n 20
 ```
 
 ---
@@ -176,4 +176,4 @@ grep -n "\[timing\]" /tmp/vc-transcriber.log | tail -n 20
 ---
 
 ## Repo layout
-- `vc-transcriber/` → **single‑bot STT + TTS**
+- `vc-voicebot/` → **single‑bot STT + TTS**

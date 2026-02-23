@@ -1,4 +1,4 @@
-# VC Transcriber (Single Bot STT + TTS)
+# VC Voicebot (Single Bot STT + TTS)
 
 One Discord bot that:
 - **Transcribes** VC speech → text channel
@@ -11,7 +11,7 @@ One Discord bot that:
 
 ## Setup
 ```bash
-cd vc-transcriber
+cd vc-voicebot
 npm install
 ./scripts/setup.sh
 cp .env.example .env
