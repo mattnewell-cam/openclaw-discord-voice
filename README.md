@@ -2,8 +2,7 @@
 
 One service, one bot: it joins a VC, transcribes speech to text, and speaks replies back into the VC.
 
-- **vc-transcriber/** now does **both** STT + TTS
-- **voice-bridge/** is legacy (two‑bot setup) and can be ignored
+- **vc-transcriber/** does **both** STT + TTS
 
 ---
 
@@ -164,4 +163,3 @@ grep -n "\[timing\]" /tmp/vc-transcriber.log | tail -n 20
 
 ## Repo layout
 - `vc-transcriber/` → **single‑bot STT + TTS**
-- `voice-bridge/` → legacy two‑bot bridge (optional)
