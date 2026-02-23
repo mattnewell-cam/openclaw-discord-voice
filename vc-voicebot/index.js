@@ -72,8 +72,7 @@ const DEBUG_VC = (process.env.DEBUG_VC || 'false').toLowerCase() === 'true';
 const TIMING_LOG = (process.env.TIMING_LOG || 'false').toLowerCase() === 'true';
 
 const TRANSCRIBE_REQUIRE_START = true;
-const TRANSCRIBE_EXACT_MATCH =
-  (process.env.TRANSCRIBE_EXACT_MATCH || 'false').toLowerCase() === 'true';
+const TRANSCRIBE_EXACT_MATCH = true;
 // NOTE: "stop message" is a common mishear of "start message".
 // Treat it as a START phrase. "end message" (and mishear "and message") closes the gate.
 const START_PHRASES = parsePhraseList(
