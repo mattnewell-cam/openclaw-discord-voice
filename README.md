@@ -102,6 +102,9 @@ LEAVE_ON_USER_IDS=YOUR_USER_ID
 ```
 Bot auto‑joins when you enter VC, and leaves when you leave.
 
+### OpenClaw allowlist (important)
+If your OpenClaw Discord config uses `groupPolicy: "allowlist"`, you must add the **voicebot’s bot user ID** to the allowlist or OpenClaw will ignore its messages.
+
 ### TTS (Edge / Piper)
 ```
 TTS_PROVIDER=edge
