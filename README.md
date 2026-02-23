@@ -43,7 +43,7 @@ sudo apt-get install -y ffmpeg python3-venv
 
 ```bash
 # from the repo root
-cd /home/matth/.openclaw/workspace/openclaw-discord-voice/vc-transcriber
+cd openclaw-discord-voice/vc-transcriber
 npm install
 ./scripts/setup.sh
 cp .env.example .env
