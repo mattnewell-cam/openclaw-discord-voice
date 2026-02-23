@@ -8,6 +8,20 @@ Openclaw is finally hands-free! This bot joins a specified voice chat when you d
 
 ## Setup
 
+### 0) Get the code
+
+**Recommended (git):**
+```bash
+git clone https://github.com/mattnewell-cam/openclaw-discord-voicebot.git
+cd openclaw-discord-voicebot
+```
+
+**Alternative (ZIP):**
+- Click **Code → Download ZIP** on GitHub
+- Unzip it and `cd` into the extracted folder (e.g. `openclaw-discord-voicebot-main`)
+
+---
+
 ### 1) Create the bot and invite to server
 
 1. Go to <https://discord.com/developers/applications>
