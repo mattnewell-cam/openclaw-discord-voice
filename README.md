@@ -26,16 +26,16 @@ cd openclaw-discord-voicebot
 
 1. Go to <https://discord.com/developers/applications>
 2. **New Application** → add a **Bot**
-3. Reset the **Bot Token** and copy it
-4. Sidebar → Bot → **Enable Message Content Intent**
-5. Sidebar → OAuth2 → Scopes: **bot**
+3. Sidebar: Bot → Reset Token and copy it → Save changes
+4. Scroll down → Enable Message Content Intent
+5. Sidebar: OAuth2 → Scopes: **bot**
 6. Scroll down to Bot Permissions → select:
-  - **View Channels**
-  - **Read Message History**
-  - **Send Messages**
-  - **Connect**
-  - **Speak**
-7. Scroll down → **copy URL**
+  - View Channels
+  - Read Message History
+  - Send Messages
+  - Connect
+  - Speak
+7. Scroll down to Generated URL and copy it
 8. Go to URL, authorise, and add it to your server
 ---
 
