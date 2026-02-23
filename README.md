@@ -6,6 +6,31 @@ Openclaw is finally hands-free! This bot joins a specified voice chat when you d
 
 ---
 
+## Usage (day‑to‑day)
+
+**Join VC**
+- Join your configured voice channel.
+- The bot should auto‑join when `YOUR_USER_ID` enters. If it doesn’t, run `/join` in the text channel.
+
+**Send a voice message to OpenClaw**
+1) Say **“start message”** in VC
+2) Wait for the **beep** (gate open)
+3) Speak your message naturally
+4) Say **“end message”** to finish (gate closes + sends)
+
+**What happens next**
+- Your speech is transcribed into the text channel.
+- OpenClaw replies in the same channel.
+- The bot speaks OpenClaw’s reply back in VC.
+
+Notes:
+- You can edit your start/end phrases in `.env` (`TRANSCRIBE_START_PHRASES`, `TRANSCRIBE_STOP_PHRASES`).
+- It can help to say them twice: **“start message, start message”** / **“end message, end message.”**
+- Saying **“start message”** again **restarts** the buffer.
+- Keep talking between start/end if you want a single combined message.
+
+---
+
 ## Setup
 
 ### 0) Get the code
@@ -126,29 +151,6 @@ Defaults for voice/model live in `vc-voicebot/scripts/edge_tts.py` and `vc-voice
 # run from vc-voicebot/
 npm start
 ```
-
----
-
-## 6) Usage (day‑to‑day)
-
-**Join VC**
-- Join your configured voice channel.
-- The bot should auto‑join when `YOUR_USER_ID` enters. If it doesn’t, run `/join` in the text channel.
-
-**Send a voice message to OpenClaw**
-1) Say **“start message”** in VC
-2) Wait for the **beep** (gate open)
-3) Speak your message naturally
-4) Say **“end message”** to finish (gate closes + sends)
-
-**What happens next**
-- Your speech is transcribed into the text channel.
-- OpenClaw replies in the same channel.
-- The bot speaks OpenClaw’s reply back in VC.
-
-Notes:
-- Saying **“start message”** again **restarts** the buffer
-- Keep talking between start/end if you want a single combined message
 
 ---
 
