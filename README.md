@@ -41,12 +41,7 @@ sudo apt-get install -y ffmpeg python3-venv
 
 ### 3) Install (single bot)
 
-Pick an install directory, then clone:
 ```bash
-mkdir -p ~/projects
-cd ~/projects
-
-git clone https://github.com/mattnewell-cam/openclaw-discord-voice.git
 cd openclaw-discord-voice/vc-transcriber
 
 npm install
