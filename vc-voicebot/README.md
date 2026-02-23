@@ -27,8 +27,8 @@ npm start
 ## Key config highlights
 - `TEXT_CHANNEL_ID` → where transcripts are posted
 - `SPEAK_CHANNEL_ID` → where TTS listens (defaults to TEXT_CHANNEL_ID)
-- `SPEAK_USER_IDS` → only transcribe these speakers
-- `TTS_SPEAK_USER_IDS` → only speak these authors (e.g., OpenClaw bot ID)
+- `YOUR_USER_ID` → only transcribe this speaker
+- `OPENCLAW_BOT_ID` → only speak this author (your OpenClaw bot)
 - `TRANSCRIBE_REQUIRE_START=true` → enable “start/end message” gating
 
 ## Commands

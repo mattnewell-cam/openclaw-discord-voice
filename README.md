@@ -73,7 +73,8 @@ DISCORD_TOKEN=
 GUILD_ID=
 VOICE_CHANNEL_ID=
 TEXT_CHANNEL_ID=
-TTS_SPEAK_USER_IDS=OPENCLAW_BOT_ID
+YOUR_USER_ID=
+OPENCLAW_BOT_ID=
 ```
 
 ### STT (Whisper)
@@ -117,11 +118,18 @@ PIPER_DATA_DIR=voices
 
 ### Author filtering (recommended)
 ```bash
-# Only transcribe these VC speakers
-SPEAK_USER_IDS=YOUR_USER_ID
+# Only transcribe this VC speaker
+YOUR_USER_ID=YOUR_USER_ID
 
 # Only speak OpenClaw replies in the text channel
-TTS_SPEAK_USER_IDS=OPENCLAW_BOT_ID
+OPENCLAW_BOT_ID=OPENCLAW_BOT_ID
+ALLOW_BOT_MESSAGES=true
+```bash
+# Only transcribe these VC speakers
+YOUR_USER_ID=YOUR_USER_ID
+
+# Only speak OpenClaw replies in the text channel
+TTS_YOUR_USER_ID=OPENCLAW_BOT_ID
 ALLOW_BOT_MESSAGES=true
 ```
 

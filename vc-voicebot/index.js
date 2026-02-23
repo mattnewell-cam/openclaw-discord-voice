@@ -72,11 +72,8 @@ const PIPER_SENTENCE_SILENCE = process.env.PIPER_SENTENCE_SILENCE || '';
 const MAX_CHUNK = Number(process.env.MAX_CHUNK || 400);
 const ALLOW_BOT_MESSAGES = (process.env.ALLOW_BOT_MESSAGES || 'true').toLowerCase() === 'true';
 
-const SPEAK_USER_IDS = parseIdList(process.env.SPEAK_USER_IDS || '');
-const IGNORE_USER_IDS = parseIdList(process.env.IGNORE_USER_IDS || '');
-
-const TTS_SPEAK_USER_IDS = parseIdList(process.env.TTS_SPEAK_USER_IDS || '');
-const TTS_IGNORE_USER_IDS = parseIdList(process.env.TTS_IGNORE_USER_IDS || '');
+const YOUR_USER_ID = (process.env.YOUR_USER_ID || '').trim();
+const OPENCLAW_BOT_ID = (process.env.OPENCLAW_BOT_ID || '').trim();
 
 const LEAVE_ON_USER_IDS = (process.env.LEAVE_ON_USER_IDS || '')
   .split(',')
@@ -118,13 +115,6 @@ function parsePhraseList(value) {
   return String(value || '')
     .split(',')
     .map((phrase) => normalizePhrase(phrase))
-    .filter(Boolean);
-}
-
-function parseIdList(value) {
-  return String(value || '')
-    .split(',')
-    .map((id) => id.trim())
     .filter(Boolean);
 }
 
@@ -424,8 +414,7 @@ async function playBeep(frequency) {
 }
 
 async function handleUserStream(userId, stream) {
-  if (IGNORE_USER_IDS.includes(userId)) return;
-  if (SPEAK_USER_IDS.length > 0 && !SPEAK_USER_IDS.includes(userId)) return;
+  if (YOUR_USER_ID && userId !== YOUR_USER_ID) return;
 
   logDebug('speaking start', userId);
 
@@ -794,8 +783,7 @@ client.on('messageCreate', async (message) => {
   if (message.channelId !== SPEAK_CHANNEL_ID) return;
   if (message.author?.id === client.user?.id) return;
   if (!ALLOW_BOT_MESSAGES && message.author.bot) return;
-  if (TTS_IGNORE_USER_IDS.includes(message.author.id)) return;
-  if (TTS_SPEAK_USER_IDS.length > 0 && !TTS_SPEAK_USER_IDS.includes(message.author.id)) return;
+  if (OPENCLAW_BOT_ID && message.author.id !== OPENCLAW_BOT_ID) return;
   if (!content) return;
 
   const spoken = sanitizeForSpeech(content);
