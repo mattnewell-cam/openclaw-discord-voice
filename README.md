@@ -90,11 +90,10 @@ Smaller model = faster `whisper_ms`.
 ```
 TRANSCRIBE_START_PHRASES=start message,stop message,so message,start the message,star message,strong message
 TRANSCRIBE_STOP_PHRASES=end message,and message
-TRANSCRIBE_EXACT_MATCH=false
 ```
 Behavior:
-- Any transcript containing **“start message”** opens/restarts the buffer
-- Any transcript containing **“end message”** closes and sends the buffer
+- Saying **“start message”** opens/restarts the buffer
+- Saying **“end message”** closes and sends the buffer
 - Words **between** are sent as **one combined message**
 
 ### Auto‑join / auto‑leave
@@ -130,16 +129,26 @@ npm start
 
 ---
 
-## 6) Usage (voice workflow)
+## 6) Usage (day‑to‑day)
 
+**Join VC**
+- Join your configured voice channel.
+- The bot should auto‑join when `YOUR_USER_ID` enters. If it doesn’t, run `/join` in the text channel.
+
+**Send a voice message to OpenClaw**
 1) Say **“start message”** in VC
 2) Wait for the **beep** (gate open)
 3) Speak your message naturally
 4) Say **“end message”** to finish (gate closes + sends)
 
+**What happens next**
+- Your speech is transcribed into the text channel.
+- OpenClaw replies in the same channel.
+- The bot speaks OpenClaw’s reply back in VC.
+
 Notes:
 - Saying **“start message”** again **restarts** the buffer
-- You can keep it open for multiple sentences before ending
+- Keep talking between start/end if you want a single combined message
 
 ---
 
