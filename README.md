@@ -39,17 +39,13 @@ sudo apt-get install -y ffmpeg python3-venv
 
 ---
 
-### 3) Install + Run (single bot)
+### 3) Install (single bot)
 
 ```bash
 cd vc-transcriber
 npm install
 ./scripts/setup.sh
 cp .env.example .env
-# edit .env
-
-# start after config
-npm start
 ```
 
 ---
@@ -116,7 +112,15 @@ ALLOW_BOT_MESSAGES=true
 
 ---
 
-## 5) Usage (voice workflow)
+## 5) Run
+
+```bash
+npm start
+```
+
+---
+
+## 6) Usage (voice workflow)
 
 1) Say **“start message”** in VC
 2) Wait for the **beep** (gate open)
@@ -129,14 +133,14 @@ Notes:
 
 ---
 
-## 6) Commands (text channel)
+## 7) Commands (text channel)
 
 - `/join` → join your current VC
 - `/beep` → play two beeps to confirm audio
 
 ---
 
-## 7) Logs + timing
+## 8) Logs + timing
 
 ```bash
 # start in background
@@ -151,7 +155,7 @@ grep -n "\[timing\]" /tmp/vc-transcriber.log | tail -n 20
 
 ---
 
-## 8) Troubleshooting
+## 9) Troubleshooting
 
 **No transcripts:**
 - Bot is in the correct VC
