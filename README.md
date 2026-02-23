@@ -42,7 +42,8 @@ sudo apt-get install -y ffmpeg python3-venv
 ### 3) Install (single bot)
 
 ```bash
-cd vc-transcriber
+# from the repo root
+cd /home/matth/.openclaw/workspace/openclaw-discord-voice/vc-transcriber
 npm install
 ./scripts/setup.sh
 cp .env.example .env
@@ -115,6 +116,7 @@ ALLOW_BOT_MESSAGES=true
 ## 5) Run
 
 ```bash
+# run from vc-transcriber/
 npm start
 ```
 
