@@ -47,6 +47,8 @@ npm install
 ./scripts/setup.sh
 cp .env.example .env
 # edit .env
+
+# start after config
 npm start
 ```
 
@@ -60,7 +62,7 @@ DISCORD_TOKEN=
 GUILD_ID=
 VOICE_CHANNEL_ID=
 TEXT_CHANNEL_ID=
-SPEAK_CHANNEL_ID=   # optional; defaults to TEXT_CHANNEL_ID
+TTS_SPEAK_USER_IDS=OPENCLAW_BOT_ID
 ```
 
 ### STT (Whisper)
@@ -107,21 +109,34 @@ PIPER_DATA_DIR=voices
 # Only transcribe these VC speakers
 SPEAK_USER_IDS=YOUR_USER_ID
 
-# Only speak these authors in SPEAK_CHANNEL_ID
+# Only speak OpenClaw replies in the text channel
 TTS_SPEAK_USER_IDS=OPENCLAW_BOT_ID
 ALLOW_BOT_MESSAGES=true
 ```
 
 ---
 
-## 5) Commands (text channel)
+## 5) Usage (voice workflow)
+
+1) Say **“start message”** in VC
+2) Wait for the **beep** (gate open)
+3) Speak your message naturally
+4) Say **“end message”** to finish (gate closes + sends)
+
+Notes:
+- Saying **“start message”** again **restarts** the buffer
+- You can keep it open for multiple sentences before ending
+
+---
+
+## 6) Commands (text channel)
 
 - `/join` → join your current VC
 - `/beep` → play two beeps to confirm audio
 
 ---
 
-## 6) Logs + timing
+## 7) Logs + timing
 
 ```bash
 # start in background
@@ -136,7 +151,7 @@ grep -n "\[timing\]" /tmp/vc-transcriber.log | tail -n 20
 
 ---
 
-## 7) Troubleshooting
+## 8) Troubleshooting
 
 **No transcripts:**
 - Bot is in the correct VC
