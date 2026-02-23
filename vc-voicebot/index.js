@@ -90,7 +90,8 @@ const TRANSCRIBE_EXACT_MATCH =
 // NOTE: "stop message" is a common mishear of "start message".
 // Treat it as a START phrase. "end message" (and mishear "and message") closes the gate.
 const START_PHRASES = parsePhraseList(
-  process.env.TRANSCRIBE_START_PHRASES || 'start message,stop message'
+  process.env.TRANSCRIBE_START_PHRASES ||
+    'start message,stop message,so message,start the message,star message,strong message'
 );
 const STOP_PHRASES = parsePhraseList(
   process.env.TRANSCRIBE_STOP_PHRASES || 'end message,and message'
