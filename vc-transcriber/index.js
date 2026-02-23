@@ -3,7 +3,9 @@ import { Client, GatewayIntentBits } from 'discord.js';
 import {
   joinVoiceChannel,
   createAudioPlayer,
+  createAudioResource,
   NoSubscriberBehavior,
+  AudioPlayerStatus,
   VoiceConnectionStatus,
   entersState,
 } from '@discordjs/voice';
@@ -34,6 +36,8 @@ const GUILD_ID = process.env.GUILD_ID;
 const VOICE_CHANNEL_ID = process.env.VOICE_CHANNEL_ID;
 const TEXT_CHANNEL_ID = process.env.TEXT_CHANNEL_ID;
 
+let currentVoiceChannelId = VOICE_CHANNEL_ID;
+
 const WHISPER_PYTHON = process.env.WHISPER_PYTHON || './.venv/bin/python';
 const WHISPER_MODEL = process.env.WHISPER_MODEL || 'small';
 const WHISPER_LANGUAGE = process.env.WHISPER_LANGUAGE || 'en';
@@ -52,16 +56,23 @@ const IGNORE_USER_IDS = (process.env.IGNORE_USER_IDS || '')
   .map((id) => id.trim())
   .filter(Boolean);
 
+const LEAVE_ON_USER_IDS = (process.env.LEAVE_ON_USER_IDS || '')
+  .split(',')
+  .map((id) => id.trim())
+  .filter(Boolean);
+
 const FILTER_FILLER = (process.env.FILTER_FILLER || 'true').toLowerCase() === 'true';
 const DEBUG_VC = (process.env.DEBUG_VC || 'false').toLowerCase() === 'true';
 
 const TRANSCRIBE_REQUIRE_START =
   (process.env.TRANSCRIBE_REQUIRE_START || 'false').toLowerCase() === 'true';
+const TRANSCRIBE_EXACT_MATCH =
+  (process.env.TRANSCRIBE_EXACT_MATCH || 'false').toLowerCase() === 'true';
 const START_PHRASES = parsePhraseList(
-  process.env.TRANSCRIBE_START_PHRASES || (TRANSCRIBE_REQUIRE_START ? 'start' : '')
+  process.env.TRANSCRIBE_START_PHRASES || (TRANSCRIBE_REQUIRE_START ? 'start message' : '')
 );
 const STOP_PHRASES = parsePhraseList(
-  process.env.TRANSCRIBE_STOP_PHRASES || (TRANSCRIBE_REQUIRE_START ? 'stop,end' : '')
+  process.env.TRANSCRIBE_STOP_PHRASES || (TRANSCRIBE_REQUIRE_START ? 'stop message,end message' : '')
 );
 
 function logDebug(...args) {
@@ -90,6 +101,9 @@ function escapeRegex(value) {
 function matchesPhrase(normalizedText, phrases) {
   if (!normalizedText || phrases.length === 0) return false;
   return phrases.some((phrase) => {
+    if (TRANSCRIBE_EXACT_MATCH) {
+      return normalizedText === phrase;
+    }
     const re = new RegExp(`\\b${escapeRegex(phrase)}\\b`, 'i');
     return re.test(normalizedText);
   });
@@ -105,8 +119,11 @@ const client = new Client({
 });
 
 let connection = null;
+let player = null;
+let wantConnected = true;
 const activeStreams = new Map();
 let gateOpen = !TRANSCRIBE_REQUIRE_START;
+let messageBuffer = '';
 
 function isFillerMessage(text) {
   const tokens = text
@@ -148,6 +165,58 @@ async function transcribeFile(wavPath) {
       if (code === 0) return resolve(out.trim());
       reject(new Error(err || `transcribe exited with code ${code}`));
     });
+  });
+}
+
+async function ensureBeep(filePath, frequency = 880, duration = 0.18) {
+  try {
+    await fs.access(filePath);
+    return;
+  } catch {}
+
+  await new Promise((resolve, reject) => {
+    const args = [
+      '-y',
+      '-f',
+      'lavfi',
+      '-i',
+      `sine=frequency=${frequency}:duration=${duration}`,
+      '-ac',
+      '1',
+      '-ar',
+      '48000',
+      filePath,
+    ];
+    const proc = spawn('ffmpeg', args, { stdio: ['ignore', 'ignore', 'pipe'] });
+    let err = '';
+    proc.stderr.on('data', (data) => (err += data.toString()));
+    proc.on('close', (code) => {
+      if (code === 0) resolve();
+      else reject(new Error(err || `ffmpeg exited with code ${code}`));
+    });
+  });
+}
+
+async function playBeep(frequency) {
+  if (!player) return;
+
+  const filePath = path.join(tmpdir(), `vc-beep-${frequency}.wav`);
+  try {
+    await ensureBeep(filePath, frequency);
+  } catch (err) {
+    console.error('beep generation failed', err);
+    return;
+  }
+
+  const resource = createAudioResource(filePath);
+  player.play(resource);
+
+  await new Promise((resolve) => {
+    const onIdle = () => {
+      player.removeListener(AudioPlayerStatus.Idle, onIdle);
+      resolve();
+    };
+    player.on(AudioPlayerStatus.Idle, onIdle);
   });
 }
 
@@ -201,22 +270,41 @@ async function handleUserStream(userId, stream) {
       if (!gateOpen) {
         if (matchesPhrase(normalized, START_PHRASES)) {
           gateOpen = true;
+          messageBuffer = '';
           logDebug('gate open', userId, transcript);
-        } else {
-          await cleanupFiles(rawPath, wavPath);
-          return;
+          await playBeep(880);
         }
+        await cleanupFiles(rawPath, wavPath);
+        return;
       }
 
       if (matchesPhrase(normalized, STOP_PHRASES)) {
         gateOpen = false;
         logDebug('gate closed', userId, transcript);
+        await playBeep(660);
+
+        const payload = messageBuffer.trim();
+        messageBuffer = '';
+
+        if (payload) {
+          const channel = await client.channels.fetch(TEXT_CHANNEL_ID);
+          if (channel && channel.isTextBased()) {
+            await channel.send(payload);
+          }
+        }
+
         await cleanupFiles(rawPath, wavPath);
         return;
       }
     }
 
     if (FILTER_FILLER && isFillerMessage(transcript)) {
+      await cleanupFiles(rawPath, wavPath);
+      return;
+    }
+
+    if (TRANSCRIBE_REQUIRE_START) {
+      messageBuffer = messageBuffer ? `${messageBuffer} ${transcript}` : transcript;
       await cleanupFiles(rawPath, wavPath);
       return;
     }
@@ -281,7 +369,11 @@ async function cleanupFiles(...pathsToRemove) {
 }
 
 async function connectVoice() {
-  const channel = await client.channels.fetch(VOICE_CHANNEL_ID);
+  wantConnected = true;
+  if (!currentVoiceChannelId) {
+    throw new Error('VOICE_CHANNEL_ID is not set');
+  }
+  const channel = await client.channels.fetch(currentVoiceChannelId);
   if (!channel || !channel.isVoiceBased()) {
     throw new Error('VOICE_CHANNEL_ID is not a voice-based channel');
   }
@@ -291,10 +383,19 @@ async function connectVoice() {
     guildId: GUILD_ID,
     adapterCreator: channel.guild.voiceAdapterCreator,
     selfDeaf: false,
-    selfMute: true,
+    selfMute: false,
   });
 
+  player = createAudioPlayer({
+    behaviors: {
+      noSubscriber: NoSubscriberBehavior.Play,
+    },
+  });
+
+  connection.subscribe(player);
+
   connection.on(VoiceConnectionStatus.Disconnected, async () => {
+    if (!wantConnected) return;
     try {
       await Promise.race([
         entersState(connection, VoiceConnectionStatus.Signalling, 5_000),
@@ -305,8 +406,18 @@ async function connectVoice() {
         connection.destroy();
       } catch {}
       connection = null;
-      await connectVoice();
+      if (wantConnected) await connectVoice();
     }
+  });
+
+  connection.on('error', async (err) => {
+    if (!wantConnected) return;
+    console.error('VoiceConnection error:', err);
+    try {
+      connection.destroy();
+    } catch {}
+    connection = null;
+    if (wantConnected) await connectVoice();
   });
 
   const receiver = connection.receiver;
@@ -335,6 +446,81 @@ async function connectVoice() {
 client.once('ready', async () => {
   console.log(`Logged in as ${client.user.tag}`);
   await connectVoice();
+});
+
+client.on('messageCreate', async (message) => {
+  if (message.author.bot) return;
+  if (message.guildId !== GUILD_ID) return;
+  if (!message.content || message.content.trim() !== '/join') return;
+
+  const voiceChannel = message.member?.voice?.channel;
+  if (!voiceChannel || !voiceChannel.isVoiceBased()) {
+    await message.reply('Join a voice channel first.');
+    return;
+  }
+
+  currentVoiceChannelId = voiceChannel.id;
+  wantConnected = true;
+  try {
+    connection?.destroy();
+  } catch {}
+  connection = null;
+  await connectVoice();
+  await message.reply(`Joined ${voiceChannel.name}.`);
+});
+
+client.on('voiceStateUpdate', async (oldState, newState) => {
+  if (
+    newState.channelId &&
+    LEAVE_ON_USER_IDS.includes(newState.id) &&
+    newState.channelId !== currentVoiceChannelId
+  ) {
+    currentVoiceChannelId = newState.channelId;
+    wantConnected = true;
+    try {
+      connection?.destroy();
+    } catch {}
+    connection = null;
+    await connectVoice();
+    return;
+  }
+
+  if (!currentVoiceChannelId) return;
+
+  if (
+    oldState.channelId === currentVoiceChannelId &&
+    newState.channelId !== currentVoiceChannelId &&
+    LEAVE_ON_USER_IDS.includes(oldState.id)
+  ) {
+    wantConnected = false;
+    try {
+      connection?.destroy();
+    } catch {}
+    connection = null;
+    return;
+  }
+
+  const channel = await client.channels.fetch(currentVoiceChannelId).catch(() => null);
+  if (!channel || !channel.isVoiceBased()) return;
+
+  const humans = channel.members.filter((member) => member.user?.bot === false);
+  if (DEBUG_VC) {
+    const memberList = channel.members.map((m) => `${m.id}:${m.user?.bot ? 'bot' : 'human'}`);
+    console.log('[vc] leave-check', {
+      channel: channel.id,
+      humans: humans.size,
+      members: memberList,
+    });
+  }
+
+  if (humans.size > 0) return;
+
+  wantConnected = false;
+  console.log('[vc] leaving (no humans)');
+  try {
+    connection?.destroy();
+  } catch {}
+  connection = null;
 });
 
 client.login(TOKEN);

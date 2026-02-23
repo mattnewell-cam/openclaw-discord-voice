@@ -27,5 +27,6 @@ npm start
 - If you have a GPU, set `WHISPER_DEVICE=cuda` and `WHISPER_COMPUTE_TYPE=float16`.
 - Optional start/stop gating:
   - Set `TRANSCRIBE_REQUIRE_START=true`
-  - Set `TRANSCRIBE_START_PHRASES=start`
-  - Set `TRANSCRIBE_STOP_PHRASES=stop,end`
+  - (Optional) `TRANSCRIBE_EXACT_MATCH=true` to only match whole phrases
+  - Set `TRANSCRIBE_START_PHRASES=start message`
+  - Set `TRANSCRIBE_STOP_PHRASES=stop message,end message`

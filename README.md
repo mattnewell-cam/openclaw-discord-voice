@@ -27,8 +27,9 @@ npm start
 
 Optional: start/stop gating
 - `TRANSCRIBE_REQUIRE_START=true`
-- `TRANSCRIBE_START_PHRASES=start`
-- `TRANSCRIBE_STOP_PHRASES=stop,end`
+- `TRANSCRIBE_EXACT_MATCH=true` (only matches whole phrases)
+- `TRANSCRIBE_START_PHRASES=start message`
+- `TRANSCRIBE_STOP_PHRASES=stop message,end message`
 
 ## Quick start (voice-bridge)
 ```bash
