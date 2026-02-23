@@ -89,7 +89,7 @@ Smaller model = faster `whisper_ms`.
 ### Start/stop gating (always on)
 ```
 TRANSCRIBE_START_PHRASES=start message,stop message
-TRANSCRIBE_STOP_PHRASES=end message,and message
+TRANSCRIBE_STOP_PHRASES=end message
 TRANSCRIBE_EXACT_MATCH=false
 ```
 Behavior:
