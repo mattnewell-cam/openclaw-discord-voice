@@ -116,22 +116,10 @@ PIPER_MODEL=voices/<your-model>.onnx
 PIPER_DATA_DIR=voices
 ```
 
-### Author filtering (recommended)
-```bash
-# Only transcribe this VC speaker
-YOUR_USER_ID=YOUR_USER_ID
-
-# Only speak OpenClaw replies in the text channel
-OPENCLAW_BOT_ID=OPENCLAW_BOT_ID
-ALLOW_BOT_MESSAGES=true
-```bash
-# Only transcribe these VC speakers
-YOUR_USER_ID=YOUR_USER_ID
-
-# Only speak OpenClaw replies in the text channel
-TTS_YOUR_USER_ID=OPENCLAW_BOT_ID
-ALLOW_BOT_MESSAGES=true
-```
+### Filtering (recommended)
+- `YOUR_USER_ID` → only transcribe your voice
+- `OPENCLAW_BOT_ID` → only speak OpenClaw replies
+- Keep `ALLOW_BOT_MESSAGES=true`
 
 ---
 
