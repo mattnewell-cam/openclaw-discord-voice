@@ -41,7 +41,7 @@ const SPEAK_CHANNEL_ID = process.env.SPEAK_CHANNEL_ID || process.env.REPLY_CHANN
 let currentVoiceChannelId = VOICE_CHANNEL_ID;
 
 const WHISPER_PYTHON = process.env.WHISPER_PYTHON || './.venv/bin/python';
-const WHISPER_MODEL = process.env.WHISPER_MODEL || 'small';
+const WHISPER_MODEL = process.env.WHISPER_MODEL || 'tiny';
 const WHISPER_LANGUAGE = process.env.WHISPER_LANGUAGE || 'en';
 const WHISPER_DEVICE = process.env.WHISPER_DEVICE || 'cpu';
 const WHISPER_COMPUTE_TYPE = process.env.WHISPER_COMPUTE_TYPE || 'int8';

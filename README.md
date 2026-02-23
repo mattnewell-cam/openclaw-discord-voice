@@ -81,6 +81,7 @@ OPENCLAW_BOT_ID=
 ```
 WHISPER_PYTHON=./.venv/bin/python
 WHISPER_MODEL=tiny|base|small|...
+(Default: tiny)
 WHISPER_LANGUAGE=en
 ```
 Smaller model = faster `whisper_ms`.
