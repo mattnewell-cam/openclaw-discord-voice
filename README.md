@@ -144,7 +144,6 @@ Defaults for voice/model live in `vc-voicebot/scripts/edge_tts.py` and `vc-voice
 ### Filtering (recommended)
 - `YOUR_USER_ID` → only transcribe your voice
 - `OPENCLAW_BOT_ID` → only speak OpenClaw replies
-- Keep `ALLOW_BOT_MESSAGES=true`
 
 ---
 
