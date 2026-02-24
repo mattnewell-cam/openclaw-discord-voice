@@ -72,12 +72,29 @@ cd openclaw-discord-voicebot
 
 ### 2) OpenClaw integration
 
-In your server:
-- Add the **OpenClaw bot** to the same server as the voicebot.
-- Pick a **text channel** where OpenClaw replies (e.g. `#transcripts`). This must be the same channel you’ll set as `TEXT_CHANNEL_ID`.
-- Pick a **voice channel** for speaking/listening (set `VOICE_CHANNEL_ID`).
+Use our current OpenClaw Discord config as the template. Edit `~/.openclaw/openclaw.json`:
 
-If OpenClaw uses an allowlist, add the **voicebot’s bot user ID** there (see config notes below).
+1) **Allow the bot + channel** in the guild config
+
+```json
+"channels": {
+  "1475142601312043019": {
+    "allow": true,
+    "requireMention": false,
+    "systemPrompt": "You are the voice transcribe assistant. Respond only to clear, direct questions or requests. Ignore anything that does not seem like a direct question or request. Transcription errors are common, so if a transcript is nonsensical, try to infer what the user likely meant before answering. Keep replies concise, plain text."
+  }
+}
+```
+
+- `1475142601312043019` is the **text channel** where transcripts + OpenClaw replies live (same as `TEXT_CHANNEL_ID`).
+- `requireMention: false` lets OpenClaw respond without @‑mentions.
+
+2) **Allowlist (if enabled)**
+If `groupPolicy: "allowlist"`, add the **voicebot’s bot user ID** to the guild `users` list so OpenClaw will read/respond to its messages.
+
+3) **Restart OpenClaw** after editing the config.
+
+That’s it — OpenClaw will read transcripts in that channel and reply using the system prompt above, and the voicebot will speak the reply in VC.
 
 ### 2) Requirements
 
