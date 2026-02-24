@@ -8,9 +8,10 @@ Openclaw is finally hands-free! This bot joins a specified voice chat when you d
 *(Setup instructions beneath).*
 
 **Start the bot**
-Navigate to your openclaw-discord-bot/vc-voicebot folder, then:
+- **If you set up systemd (see 6b):** it starts automatically on boot and restarts on crashes.
+- **If you didn’t:** run it manually from `vc-voicebot/`:
+
 ```bash
-# run from vc-voicebot/
 npm start
 ```
 
