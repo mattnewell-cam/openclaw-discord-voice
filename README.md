@@ -2,11 +2,17 @@
 
 Openclaw is finally hands-free! This bot joins a specified voice chat when you do, transcribes your speech to text in a chat with Openclaw, then reads Openclaw's response back to you. 
 
-- **vc-voicebot/** does **both** STT + TTS
-
 ---
 
-## Usage (day‑to‑day)
+## Usage
+*(Setup instructions beneath).*
+
+**Start the bot**
+Navigate to your openclaw-discord-bot/vc-voicebot folder, then:
+```bash
+# run from vc-voicebot/
+npm start
+```
 
 **Join VC**
 - Join your configured voice channel.
@@ -15,7 +21,7 @@ Openclaw is finally hands-free! This bot joins a specified voice chat when you d
 **Send a voice message to OpenClaw**
 1) Say **“start message”** in VC
 2) Wait for the **beep** (gate open)
-3) Speak your message naturally
+3) Speak your message clearly and naturally
 4) Say **“end message”** to finish (gate closes + sends)
 
 **What happens next**
@@ -27,7 +33,6 @@ Notes:
 - You can edit your start/end phrases in `.env` (`TRANSCRIBE_START_PHRASES`, `TRANSCRIBE_STOP_PHRASES`).
 - It can help to say them twice: **“start message, start message”** / **“end message, end message.”**
 - Saying **“start message”** again **restarts** the buffer.
-- Keep talking between start/end if you want a single combined message.
 
 ---
 
@@ -44,6 +49,7 @@ cd openclaw-discord-voicebot
 **Alternative (ZIP):**
 - Click **Code → Download ZIP** on GitHub
 - Unzip it and `cd` into the extracted folder (e.g. `openclaw-discord-voicebot-main`)
+- Rename it `openclaw-discord-voicebot` so later commands work
 
 ---
 
@@ -51,7 +57,7 @@ cd openclaw-discord-voicebot
 
 1. Go to <https://discord.com/developers/applications>
 2. **New Application** → add a **Bot**
-3. Sidebar: Bot → Reset Token and copy it → Save changes
+3. Sidebar: Bot → Reset Token, copy it (we'll need this later) → Save changes
 4. Scroll down → Enable Message Content Intent
 5. Sidebar: OAuth2 → Scopes: **bot**
 6. Scroll down to Bot Permissions → select:
@@ -61,8 +67,16 @@ cd openclaw-discord-voicebot
   - Connect
   - Speak
 7. Scroll down to Generated URL and copy it
-8. Go to URL, authorise, and add it to your server
+8. Go to URL, authorise, and add it to your personal server
 ---
+
+### 2) OpenClaw integration
+
+In your server, add:
+- A dedicated text channel for transcription and OpenClaw responses (e.g. #transcripts)
+- A voice channel which the voicebot will listen and speak in - you can use General or create a new one
+
+
 
 ### 2) Requirements
 
@@ -78,7 +92,7 @@ sudo apt-get install -y ffmpeg python3-venv
 
 ---
 
-### 3) Install (single bot)
+### 3) Install
 
 ```bash
 cd openclaw-discord-voicebot/vc-voicebot
@@ -90,9 +104,12 @@ cp .env.example .env
 
 ---
 
-### 4) Configuration (.env)
+### 4) Configure .env
 
-### Core
+Discord token is the one you copied during the bot setup. If you have lost it, you can get another one by going back to <https://discord.com/developers/applications> → Bot → Reset token
+
+For the others, first turn Discord Developer Mode on (Discord → Settings → Advanced). Then you can get IDs by right clicking a server, channel or user and selecting "Copy ID". Paste them into this section of .env:
+
 ```
 DISCORD_TOKEN=
 GUILD_ID=
@@ -102,52 +119,11 @@ YOUR_USER_ID=
 OPENCLAW_BOT_ID=
 ```
 
-### Python
-```
-PYTHON=./.venv/bin/python
-```
-
-### STT (Whisper)
-```
-WHISPER_MODEL=tiny|base|small|...
-(Default: tiny)
-WHISPER_LANGUAGE=en
-```
-Smaller model = faster `whisper_ms`.
-
-### Start/stop gating (always on)
-```
-TRANSCRIBE_START_PHRASES=start message,stop message,so message,start the message,star message,strong message
-TRANSCRIBE_STOP_PHRASES=end message,and message
-```
-Behavior:
-- Saying **“start message”** opens/restarts the buffer
-- Saying **“end message”** closes and sends the buffer
-- Words **between** are sent as **one combined message**
-
-### Auto‑join / auto‑leave
-Auto‑join/leave follows `YOUR_USER_ID` (no separate setting).
-
-### OpenClaw allowlist (important)
-If your OpenClaw Discord config uses `groupPolicy: "allowlist"`, you must add the **voicebot’s bot user ID** to the allowlist or OpenClaw will ignore its messages.
-
-### TTS (Edge / Piper)
-```
-TTS_PROVIDER=edge
-```
-If you use **Piper**:
-```
-TTS_PROVIDER=piper
-```
-Defaults for voice/model live in `vc-voicebot/scripts/edge_tts.py` and `vc-voicebot/scripts/piper_tts.py`.
-
-### Filtering (recommended)
-- `YOUR_USER_ID` → only transcribe your voice
-- `OPENCLAW_BOT_ID` → only speak OpenClaw replies
+Optional configurations are detailed at the bottom of this README.
 
 ---
 
-## 5) Run
+### 5) Run
 
 ```bash
 # run from vc-voicebot/
@@ -156,14 +132,41 @@ npm start
 
 ---
 
-## 7) Commands (text channel)
+## Additional Configurations
 
-- `/join` → join your current VC
-- `/beep` → play two beeps to confirm audio
+**STT (Whisper)**
+```
+WHISPER_PYTHON=./.venv/bin/python
+WHISPER_MODEL=tiny|base|small|...
+(Default: tiny)
+WHISPER_LANGUAGE=en
+```
+Smaller model = faster responds to "start/end message" but slightly worse transcriptions.
+
+**Start/stop gating (always on)**
+```
+TRANSCRIBE_START_PHRASES=start message,stop message,so message,start the message,star message,strong message
+TRANSCRIBE_STOP_PHRASES=end message,and message
+```
+Note: "stop message" is included as a start phrase as it is a frequent mis-transcription of "start message". 
+
+Auto‑join / auto‑leave
+Auto‑join/leave follows `YOUR_USER_ID` (no separate setting).
+
+**TTS (Edge / Piper)**
+```
+TTS_PROVIDER=edge
+TTS_PYTHON=./.venv/bin/python
+```
+If you use **Piper**:
+```
+TTS_PROVIDER=piper
+```
+Defaults for voice/model live in `vc-voicebot/scripts/edge_tts.py` and `vc-voicebot/scripts/piper_tts.py`.
 
 ---
 
-## 8) Logs + timing
+## Logs + timing
 
 ```bash
 # start in background
@@ -178,7 +181,7 @@ grep -n "\[timing\]" /tmp/vc-voicebot.log | tail -n 20
 
 ---
 
-## 9) Troubleshooting
+## Troubleshooting
 
 **No transcripts:**
 - Bot is in the correct VC
@@ -193,8 +196,3 @@ grep -n "\[timing\]" /tmp/vc-voicebot.log | tail -n 20
 
 **Opus decode crashes:**
 - Use `@discordjs/opus` (already in package.json)
-
----
-
-## Repo layout
-- `vc-voicebot/` → **single‑bot STT + TTS**
