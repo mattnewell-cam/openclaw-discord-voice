@@ -72,11 +72,12 @@ cd openclaw-discord-voicebot
 
 ### 2) OpenClaw integration
 
-In your server, add:
-- A dedicated text channel for transcription and OpenClaw responses (e.g. #transcripts)
-- A voice channel which the voicebot will listen and speak in - you can use General or create a new one
+In your server:
+- Add the **OpenClaw bot** to the same server as the voicebot.
+- Pick a **text channel** where OpenClaw replies (e.g. `#transcripts`). This must be the same channel you’ll set as `TEXT_CHANNEL_ID`.
+- Pick a **voice channel** for speaking/listening (set `VOICE_CHANNEL_ID`).
 
-
+If OpenClaw uses an allowlist, add the **voicebot’s bot user ID** there (see config notes below).
 
 ### 2) Requirements
 
