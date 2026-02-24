@@ -40,7 +40,7 @@ const SPEAK_CHANNEL_ID = process.env.SPEAK_CHANNEL_ID || process.env.REPLY_CHANN
 
 let currentVoiceChannelId = VOICE_CHANNEL_ID;
 
-const WHISPER_PYTHON = process.env.WHISPER_PYTHON || './.venv/bin/python';
+const PYTHON = process.env.PYTHON || './.venv/bin/python';
 const WHISPER_MODEL = process.env.WHISPER_MODEL || 'tiny';
 const WHISPER_LANGUAGE = process.env.WHISPER_LANGUAGE || 'en';
 const WHISPER_DEVICE = process.env.WHISPER_DEVICE || 'cpu';
@@ -54,7 +54,6 @@ const BEEP_AMPLITUDE = Number(process.env.BEEP_AMPLITUDE || 0.9);
 const BEEP_VERSION = 'v2';
 
 const TTS_PROVIDER = (process.env.TTS_PROVIDER || 'edge').toLowerCase();
-const TTS_PYTHON = process.env.TTS_PYTHON || './.venv/bin/python';
 
 const MAX_CHUNK = 400;
 const ALLOW_BOT_MESSAGES = (process.env.ALLOW_BOT_MESSAGES || 'true').toLowerCase() === 'true';
@@ -202,7 +201,7 @@ function synthesizePiper(text, outFile) {
   return new Promise((resolve, reject) => {
     const args = [path.join('scripts', 'piper_tts.py'), '--text', text, '--out', outFile];
 
-    const proc = spawn(TTS_PYTHON, args, { stdio: ['ignore', 'inherit', 'inherit'] });
+    const proc = spawn(PYTHON, args, { stdio: ['ignore', 'inherit', 'inherit'] });
     proc.on('error', reject);
     proc.on('exit', (code) => {
       if (code === 0) resolve();
@@ -215,7 +214,7 @@ function synthesizeEdge(text, outFile) {
   return new Promise((resolve, reject) => {
     const args = [path.join('scripts', 'edge_tts.py'), '--text', text, '--out', outFile];
 
-    const proc = spawn(TTS_PYTHON, args, { stdio: ['ignore', 'inherit', 'inherit'] });
+    const proc = spawn(PYTHON, args, { stdio: ['ignore', 'inherit', 'inherit'] });
     proc.on('error', reject);
     proc.on('exit', (code) => {
       if (code === 0) resolve();
@@ -294,7 +293,7 @@ async function transcribeFile(wavPath) {
       WHISPER_COMPUTE_TYPE,
     ];
 
-    const proc = spawn(WHISPER_PYTHON, args, { stdio: ['ignore', 'pipe', 'pipe'] });
+    const proc = spawn(PYTHON, args, { stdio: ['ignore', 'pipe', 'pipe'] });
     let out = '';
     let err = '';
 

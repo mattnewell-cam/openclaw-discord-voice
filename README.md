@@ -102,9 +102,13 @@ YOUR_USER_ID=
 OPENCLAW_BOT_ID=
 ```
 
+### Python
+```
+PYTHON=./.venv/bin/python
+```
+
 ### STT (Whisper)
 ```
-WHISPER_PYTHON=./.venv/bin/python
 WHISPER_MODEL=tiny|base|small|...
 (Default: tiny)
 WHISPER_LANGUAGE=en
@@ -130,7 +134,6 @@ If your OpenClaw Discord config uses `groupPolicy: "allowlist"`, you must add th
 ### TTS (Edge / Piper)
 ```
 TTS_PROVIDER=edge
-TTS_PYTHON=./.venv/bin/python
 ```
 If you use **Piper**:
 ```
