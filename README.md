@@ -74,11 +74,11 @@ cd openclaw-discord-voicebot
 
 Use our current OpenClaw Discord config as the template. Edit `~/.openclaw/openclaw.json`:
 
-1) **Allow the bot + channel** in the guild config
+1) **Allow bots + the transcript channel**, and set the system prompt (this is the exact prompt we use)
 
 ```json
 "channels": {
-  "1475142601312043019": {
+  "<TEXT_CHANNEL_ID>": {
     "allow": true,
     "requireMention": false,
     "systemPrompt": "You are the voice transcribe assistant. Respond only to clear, direct questions or requests. Ignore anything that does not seem like a direct question or request. Transcription errors are common, so if a transcript is nonsensical, try to infer what the user likely meant before answering. Keep replies concise, plain text."
@@ -86,11 +86,26 @@ Use our current OpenClaw Discord config as the template. Edit `~/.openclaw/openc
 }
 ```
 
-- `1475142601312043019` is the **text channel** where transcripts + OpenClaw replies live (same as `TEXT_CHANNEL_ID`).
+- `<TEXT_CHANNEL_ID>` is the **text channel** where transcripts + OpenClaw replies live (same as `TEXT_CHANNEL_ID` in `.env`).
 - `requireMention: false` lets OpenClaw respond without @‑mentions.
 
-2) **Allowlist (if enabled)**
-If `groupPolicy: "allowlist"`, add the **voicebot’s bot user ID** to the guild `users` list so OpenClaw will read/respond to its messages.
+2) **Allowlist (only if enabled)**
+If your Discord config has `groupPolicy: "allowlist"`, make sure **bots are allowed** and the voicebot’s user ID is in the guild `users` list:
+
+```json
+"allowBots": true,
+"groupPolicy": "allowlist",
+"guilds": {
+  "<GUILD_ID>": {
+    "users": ["<YOUR_USER_ID>", "<VOICEBOT_USER_ID>"],
+    "channels": {
+      "<TEXT_CHANNEL_ID>": { "allow": true }
+    }
+  }
+}
+```
+
+If `groupPolicy` is set to `"open"`, you can skip this step.
 
 3) **Restart OpenClaw** after editing the config.
 
