@@ -8,7 +8,7 @@ Openclaw is finally hands-free! This bot joins a specified voice chat when you d
 *(Setup instructions beneath).*
 
 **Start the bot**
-This runs as a systemd service (always‑on). Once enabled, it starts on boot and restarts on crashes.
+This runs as an always‑on service. Once installed, it starts on boot and restarts on crashes (no manual `npm start`).
 
 **Join VC**
 - Join your configured voice channel.
@@ -152,20 +152,17 @@ Optional configurations are detailed at the bottom of this README.
 
 ---
 
-### 6) Run (systemd, always‑on)
+### 6) Run (always‑on)
 
-A ready-to-copy unit file is in `vc-voicebot/systemd/openclaw-voicebot.service`.
-
-1. Copy it to `/etc/systemd/system/`.
-2. Replace `<USER>` and (if needed) set `ExecStart` to the full path from `which npm`.
-3. Reload + enable:
+From `vc-voicebot/`, run:
 
 ```bash
-sudo systemctl daemon-reload
-sudo systemctl enable --now openclaw-voicebot
+./scripts/install-service.sh
 ```
 
-Logs:
+That’s it. It installs the service for your user, starts it now, and enables it on boot.
+
+If you ever need to check logs:
 ```bash
 sudo journalctl -u openclaw-voicebot -f
 ```
