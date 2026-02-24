@@ -72,9 +72,9 @@ cd openclaw-discord-voicebot
 
 ### 2) OpenClaw integration
 
-Use our current OpenClaw Discord config as the template. Edit `~/.openclaw/openclaw.json`:
+There are two ways to do this. You can either edit `~/.openclaw/openclaw.json` directly, or you can copy (1) and (2) and paste them to OpenClaw in a chat. 
 
-1) **Allow bots + the transcript channel**, and set the system prompt (this is the exact prompt we use)
+1) **Allow bots + the transcript channel**, and set the system prompt
 
 ```json
 "channels": {
@@ -111,7 +111,7 @@ If `groupPolicy` is set to `"open"`, you can skip this step.
 
 That’s it — OpenClaw will read transcripts in that channel and reply using the system prompt above, and the voicebot will speak the reply in VC.
 
-### 2) Requirements
+### 3) Requirements
 
 - Node.js 18+
 - Python 3.10+
@@ -125,7 +125,7 @@ sudo apt-get install -y ffmpeg python3-venv
 
 ---
 
-### 3) Install
+### 4) Install
 
 ```bash
 cd openclaw-discord-voicebot/vc-voicebot
@@ -137,7 +137,7 @@ cp .env.example .env
 
 ---
 
-### 4) Configure .env
+### 5) Configure .env
 
 Discord token is the one you copied during the bot setup. If you have lost it, you can get another one by going back to <https://discord.com/developers/applications> → Bot → Reset token
 
@@ -156,7 +156,7 @@ Optional configurations are detailed at the bottom of this README.
 
 ---
 
-### 5) Run
+### 6) Run
 
 ```bash
 # run from vc-voicebot/
