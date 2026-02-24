@@ -163,6 +163,24 @@ Optional configurations are detailed at the bottom of this README.
 npm start
 ```
 
+### 6b) Always‑on (systemd)
+
+A ready-to-copy unit file is in `vc-voicebot/systemd/openclaw-voicebot.service`.
+
+1. Copy it to `/etc/systemd/system/`.
+2. Replace `<USER>` and (if needed) set `ExecStart` to the full path from `which npm`.
+3. Reload + enable:
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable --now openclaw-voicebot
+```
+
+Logs:
+```bash
+sudo journalctl -u openclaw-voicebot -f
+```
+
 ---
 
 ## Additional Configurations
