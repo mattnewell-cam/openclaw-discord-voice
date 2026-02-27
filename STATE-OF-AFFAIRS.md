@@ -18,12 +18,12 @@
 ## Shelved
 
 
-## Future Ideas (please never B2B saas)
+## Future Ideas (please never B2B) - PLAIN LANGUAGE
 
-- Faceless shorts engine: pick one niche, publish daily clips, monetize via creator fund + affiliates.
-- Digital products for marketplaces (Etsy/Gumroad): printable packs, prompt packs, and creator templates.
-- Personal-brand writing offers for individual creators (ghost posts/threads/newsletters sold as fixed bundles).
-- Niche micro-media account (X/Moltbook) grown for sponsorships + affiliate sales.
+- 48-hour automation setup service: a customer tells me one repetitive task (for example, "when a form is submitted, add it to a sheet and send a follow-up email") and I build that workflow for them in 2 days for a fixed price.
+- Weekly content repurposing service for creators: customer gives me one long video/podcast/voice note, and I deliver short scripts, social posts, and a newsletter draft every week.
+- Downloadable template packs sold on Etsy/Gumroad: one-time purchase files like Notion templates, Canva templates, and prompt packs people can use immediately.
+- "AI app safety check" service: I review a small AI-built app for common security mistakes (private data visible, broken permissions, exposed keys) and deliver a plain-English fix list.
 
 
 ## Tried and Failed
