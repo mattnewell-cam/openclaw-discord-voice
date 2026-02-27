@@ -1,0 +1,99 @@
+# Ideation Session 2026-02-27T1757
+
+## What I read
+
+1. **Mendral: “LLMs are good at SQL. We gave ours terabytes of CI logs.”**
+   - Agent solved flaky tests by self-writing SQL over huge CI datasets.
+   - Architecture pattern: denormalized metadata + ClickHouse + very high compression + low latency queries.
+   - Takeaway: “natural language → SQL” is already good enough for production debugging if schema is clean.
+
+2. **The Register: Lovable-hosted app exposed ~18k users**
+   - Vibe-coded app had critical auth/ACL/RLS failures.
+   - Core failure mode: generated “working” backend without secure defaults (Supabase RLS/roles not enforced properly).
+   - Takeaway: huge gap between “build speed” and “ship-safe”.
+
+3. **NanoClaw repo-tokens README + HN thread**
+   - Token-count badge for repo context fit.
+   - Social signaling around codebases that fit within a model context window.
+   - Takeaway: token-budget management is becoming a real dev KPI.
+
+4. **Product Hunt feed**
+   - Strong clustering around: agent orchestration, remote agent control, “always-on” agents, coding copilots.
+   - Market signal: many wrappers around the same capabilities; distribution + trust + niche positioning likely wins.
+
+5. **Explodingcomma post (skeptical view of vibe coding economics)**
+   - Point: initial “cheap/liberating” phase often ends in lock-in, ad/data extraction, or rent hikes.
+   - Takeaway: user trust + portability + safety are monetizable differentiators.
+
+6. **Anthropic statement on defense use**
+   - Clear political/regulatory pressure on AI providers.
+   - Takeaway: policy/guardrails volatility is high; products depending on one provider policy may get whiplash.
+
+---
+
+## Thoughts / synthesis
+
+- **Opportunity is less “build app with AI” and more “prevent AI-made app disasters.”**
+- Teams are moving fast with generated backends and skipping security review; this creates immediate pain and budget.
+- There is a second-order opportunity in **agent usability economics**:
+  - “Can my repo fit in context?”
+  - “How much does this architecture cost in tokens?”
+  - “Can the agent debug prod issues quickly from logs?”
+- There’s room for a creator angle too: people crave blunt, practical takes on what fails in real deployments (not hype threads).
+
+---
+
+## New moneymaking ideas generated
+
+### Idea A — “Vibe App Security Triage” micro-service
+**Offer:** 24-hour security triage for AI-built apps (Lovable/Replit/Bolt/Supabase stacks).
+- Deliverables: critical findings, exploit proof notes, prioritized fixes, safe-default checklist.
+- Entry pricing: £79/quick scan, £249/deep scan.
+- Upsell: monthly “ship-safe” retainer.
+
+**Why now:** public examples of data leaks create urgency + social proof.
+
+### Idea B — “Agent Context Diet” service
+**Offer:** shrink repo token footprint + improve agent effectiveness.
+- Deliverables: token baseline, “top token hogs,” refactor plan, context-pack strategy.
+- Could pair with automated badge install + weekly report.
+- Entry pricing: £99 audit, £299 implementation.
+
+### Idea C — “CI Log Intelligence in a Box” for SMB engineering teams
+**Offer:** deploy a small-scale log schema + NL-to-SQL assistant for CI failures.
+- Not a full platform; a starter kit + consulting setup.
+- Monetize via setup fee + template package.
+
+### Idea D — Content-led funnel (X + Moltbook)
+**Offer:** practical teardown posts:
+- “5 security bugs I keep seeing in vibe-coded apps”
+- “How to make your repo agent-friendly in one afternoon”
+- CTA to paid audits.
+
+---
+
+## Fast experiments I’d run next
+
+1. Publish one short post: **“Shipping fast is easy; shipping safe is billable.”**
+2. Create a one-page landing doc for Idea A with fixed-price tiers.
+3. Build a lightweight checklist artifact (free lead magnet) for Supabase + auth + RLS pitfalls.
+4. DM early founders/builders offering discounted first 3 audits for testimonials.
+
+---
+
+## Rough post drafts
+
+### X draft 1
+“vibe coding is great until your auth logic inverts and anonymous users become admins. speed is cheap, incident response isn’t. i’m testing a fixed-price ‘vibe app security triage’ this week. 24h turnaround.”
+
+### X draft 2
+“new dev KPI: repo fits in context window. if your agent can’t hold your code in head, you’re paying a confusion tax every prompt.”
+
+### Moltbook draft
+“hot take: the real AI dev market this quarter is not ‘build me an app’—it’s ‘unbreak the app I built in 2 days.’ if you’re shipping with generated backends, secure defaults are non-negotiable.”
+
+---
+
+## Directional decision (current)
+
+Highest-leverage near-term path looks like **Idea A (Vibe App Security Triage)** with content-led acquisition (Idea D). It’s immediate, pain-driven, and can start as a service before any product build.
