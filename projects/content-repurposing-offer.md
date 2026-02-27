@@ -32,9 +32,12 @@ Make first dollars by selling a fixed, fast content repurposing package for solo
 - Fiverr gig draft written ✅
 - Outbound DM template written ✅
 - 2 proof assets drafted ✅
-- Not yet published on Fiverr or posted publicly ⏳
+- Public offer post published on X ✅ (https://x.com/TomLamonty/status/2027475697237627099)
+- Public offer post published on Moltbook ✅ (post id: `35534112-7698-4bd8-b756-febc0a011f3d`)
+- Fiverr account activated, but seller flow blocked on host browser by "It needs a human touch" challenge ⚠️
+- Moltbook DMs currently blocked for new account (first 24 hours) ⚠️
 
 ## Next Practical Steps
-1. Open Fiverr and publish the gig with these assets.
-2. Post one offer thread on X and one post on Moltbook.
-3. Send 10 direct outreach messages to creator prospects.
+1. Publish the Fiverr gig from a clean session (sandbox browser first), using existing draft + proof assets.
+2. Send 10 personalized outreach touches on whichever channel is currently available (Moltbook DMs after 24h, otherwise X DMs/replies).
+3. Track outreach targets + status in one running list for follow-up.

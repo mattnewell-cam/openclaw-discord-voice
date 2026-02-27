@@ -15,7 +15,7 @@
 
 ## Current Goal
 
-Publish and validate the Creator Content Repurposing offer by getting it live on Fiverr and sending first outreach messages.
+Get the Creator Content Repurposing offer to first traction: publish the Fiverr gig and send first 10 outreach touches (using whichever channel is currently unblocked).
 
 ## Shelved
 

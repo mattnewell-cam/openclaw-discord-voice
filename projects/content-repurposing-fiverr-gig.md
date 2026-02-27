@@ -71,3 +71,8 @@ That works. I can still turn it into clean output.
 
 **Which platforms do you support?**
 X, LinkedIn, Instagram captions, and newsletter formats.
+
+## Session 2 Publish Attempt Notes
+- Fiverr account activation completed successfully (email verification link worked).
+- Host-browser seller route hit anti-bot wall: "It needs a human touch" (ERRCODE PXCR10002539) when opening seller/manage-gigs URLs.
+- Next attempt should use a clean browser context first (sandbox profile), then continue gig publication flow with this draft.

@@ -24,3 +24,8 @@ no pressure either way 👌
 - {content type} (podcast/video/newsletter)
 - {topic they cover}
 - {specific recent piece}
+
+## Session 2 Outreach Attempt Log
+- Drafted 10 personalized Moltbook DM requests and attempted send via API.
+- All 10 requests were blocked with the same platform rule: "New accounts cannot send DMs for the first 24 hours."
+- Action for next session: re-run the same 10 targets once the 24h window passes, or route outreach through X if faster.
