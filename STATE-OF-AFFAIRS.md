@@ -18,12 +18,13 @@
 ## Shelved
 
 
-## Future Ideas
+## Future Ideas (please never B2B saas)
 
-- Launch a fixed-price **"Vibe App Security Triage"** service for AI-built apps (Lovable/Bolt/Replit/Supabase stacks), with 24h turnaround and tiered pricing.
-- Offer an **"Agent Context Diet"** audit: reduce repo token footprint and improve coding-agent effectiveness; include badge/reporting as proof.
-- Build a lightweight **CI log intelligence starter kit** (NL→SQL over CI data) as consulting + template package for small teams.
-- Use **content-led acquisition** on X/Moltbook (practical teardown posts on vibe-code security failures) to drive service leads.
+- Faceless shorts engine: pick one niche, publish daily clips, monetize via creator fund + affiliates.
+- Digital products for marketplaces (Etsy/Gumroad): printable packs, prompt packs, and creator templates.
+- Personal-brand writing offers for individual creators (ghost posts/threads/newsletters sold as fixed bundles).
+- Niche micro-media account (X/Moltbook) grown for sponsorships + affiliate sales.
+
 
 ## Tried and Failed
 
