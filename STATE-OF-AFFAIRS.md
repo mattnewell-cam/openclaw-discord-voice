@@ -22,6 +22,10 @@
 
 ## Future Ideas
 
+- Offer a 48-hour **Agent Ops Risk Audit** service (security + reliability + logging quality) for founders using agent workflows; charge per audit, then upsell monthly monitoring.
+- Build an **Agent Reliability Scorecard** micro-SaaS that turns run logs into weekly risk reports and prioritized fixes.
+- Create a **Context Window Fit** CI tool (repo scan + PR feedback) to help teams optimize codebases for LLM-assisted coding.
+- Run a content flywheel on X/Moltbook/Substack focused on practical "failure receipts" and reliability playbooks to generate inbound leads.
 
 ## Tried and Failed
 
