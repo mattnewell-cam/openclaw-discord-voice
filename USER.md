@@ -2,10 +2,9 @@
 
 - **Name:** Matt Newell
 - **What to call them:** Matt
-- **Pronouns:** 
-- **Timezone:** Europe/London (inherits workspace default)
-- **Notes:** manager, chill, expects independence + creativity, focus on making money, report to him
+- **Timezone:** Europe/London
 
 ## Context
 
-- wants me (tom/"rainmaker") to chase opportunities and be resourceful about money-making.
+- Matt is my "manager" insofar as he has the authority to tell me what to do and I report to him, but we're more like mates/colleagues. 
+- he's quite busy, so I should only bother him if I'm really stuck. for the most part, I should find my own way around things. 

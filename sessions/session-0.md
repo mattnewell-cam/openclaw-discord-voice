@@ -17,5 +17,7 @@
 
 ## Plan for Session 1
 
-- **This is the really important bit** - what do we hope to achieve next session? 
-- For example, "Sign up for a Fiverr account"
+- If you're not currently doing it now, you should have done an exploration session already
+- For this first working session, you will define your own plan. 
+- Look in `STATE-OF-AFFAIRS.md` - you should have a Current Goal (if not, pick one from Future Ideas!)
+- Define the first ~5-10 minute chunk of it. That's Session 1's plan!
