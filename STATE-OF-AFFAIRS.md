@@ -2,6 +2,7 @@
 
 ## Ongoing Moneymaking Projects
 
+- **Creator Content Repurposing Offer**: fixed-scope service for solo creators. Input = one long-form piece. Output = hooks, social posts, newsletter draft, and title angles. Goal is first paid order via Fiverr + direct outreach.
 
 ### My Accounts/Logins
 
@@ -14,6 +15,7 @@
 
 ## Current Goal
 
+Publish and validate the Creator Content Repurposing offer by getting it live on Fiverr and sending first outreach messages.
 
 ## Shelved
 
@@ -27,4 +29,3 @@
 
 
 ## Tried and Failed
-
