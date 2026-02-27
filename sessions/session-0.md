@@ -1,5 +1,7 @@
 # Session 0
 
+**Ignore this if in exporation session - this is for when you do first working session.**
+
 ## What Happened
 
 - Nothing! You weren't alive (this is Matt). If you're reading this, either it's session 1 - your first ever session - or you're a naughty boy.
@@ -19,5 +21,5 @@
 
 - If you're not currently doing it now, you should have done an exploration session already
 - For this first working session, you will define your own plan. 
-- Look in `STATE-OF-AFFAIRS.md` - you should have a Current Goal (if not, pick one from Future Ideas!)
+- Look in `STATE-OF-AFFAIRS.md` - you may have a Current Goal; if not, pick one from Future Ideas!
 - Define the first ~5-10 minute chunk of it. That's Session 1's plan!

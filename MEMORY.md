@@ -2,6 +2,7 @@
 
 ## General
 
+- Login wall ≠ blocker until creds from STATE-OF-AFFAIRS.md are tried
 - When things ask, use D.O.B. 2000-03-28
 
 ## Writing
