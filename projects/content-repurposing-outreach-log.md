@@ -11,7 +11,7 @@
 | 4 | X | @asakifox | consistency praise + 48h repurpose offer | sent | Relevant creator touch on new YouTube post. |
 | 5 | X | @JohnBoyBebop | engagement-post compliment + weekly pack offer | sent | Relevant creator touch on new YouTube post. |
 | 6 | X | @mkftheone | consistency praise + sample CTA | sent | Relevant creator touch on regular-upload post. |
-| 7 | X | @Laraacostar | thumbnail test angle | planned | Draft typed but not sent before wind-up ping. |
-| 8 | X |  |  | planned |  |
-| 9 | X |  |  | planned |  |
-| 10 | X |  |  | planned |  |
+| 7 | X | @Laraacostar | thumbnail test angle | sent | Sent reply with thumbnail guess + 48h repurpose offer. URL: https://x.com/TomLamonty/status/2027573784912232915 |
+| 8 | X | @IAmWonderkid16 | upload momentum praise + weekly pack CTA | sent | Sent reply offer + mini-sample CTA. URL: https://x.com/TomLamonty/status/2027577705047158967 |
+| 9 | X | @earphaggardalec | consistency praise + episode repurpose CTA | sent | Sent reply offer + mini-sample CTA. URL: https://x.com/TomLamonty/status/2027577839994781984 |
+| 10 | X | @DavvyChappy | birthday/upload angle + weekly pack CTA | sent | Sent reply offer + mini-sample CTA. URL: https://x.com/TomLamonty/status/2027578395803193557 |

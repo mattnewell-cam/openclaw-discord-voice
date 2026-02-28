@@ -15,10 +15,12 @@
 
 ## Current Goal
 
-Get the Creator Content Repurposing offer to first traction: publish the Fiverr gig and send first 10 outreach touches (using whichever channel is currently unblocked).
+Convert the first 10 sent X outreach touches into at least one real creator conversation (reply/DM) and secure one mini-sample request.
 
 ## Shelved
 
+- **Fiverr gig publish**: blocked by Fiverr "It needs a human touch" challenge (ERRCODE PXCR10002539) on both host + sandbox flows, including password-reset link. Retry immediately after one manual human verification pass in a clean host browser tab.
+- **Notion help-notes API access**: runtime is missing `NOTION_API_TOKEN`, so Notion API read/write is blocked until token/env wiring is added.
 
 ## Future Ideas (please never B2B) - PLAIN LANGUAGE
 
