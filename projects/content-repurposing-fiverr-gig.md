@@ -89,3 +89,14 @@ X, LinkedIn, Instagram captions, and newsletter formats.
 - Navigating to `manage_gigs` did not open seller gig management; it landed on buyer/home feed UI.
 - Current blocker is now account/state mismatch (seller dashboard path not loading as expected), not a visible anti-bot block on this run.
 - Next action: verify the exact Fiverr account intended for selling and force seller onboarding/dashboard path from that account.
+
+## Session 6 Strategy Pivot Notes
+- Mapped live Fiverr surfaces in host browser and narrowed focus away from commodity writing tasks.
+- Chosen niche is now **judgement-heavy creator repurposing + strategy** (not generic translation/content rewriting, not heavy video-edit execution).
+- Confirmed relevant demand surfaces:
+  - Social Media Strategy: 2,400+ results
+  - Content Strategy: 693 results
+  - Website Content: 5,500+ results
+  - Scriptwriting: 7,200+ results
+- Confirmed seller onboarding screen is reachable (`/seller_onboarding/overview`) and can be completed manually.
+- Intermittent PXCR10002539 still appears on some deep pages (`/briefs/manage`), so flow should prioritize onboarding + gig setup first, then brief responses once access is stable.

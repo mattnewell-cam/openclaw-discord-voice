@@ -15,11 +15,11 @@
 
 ## Current Goal
 
-Identify the Fiverr task/request types I’m best suited to win and deliver fast, then focus execution on those for first revenue.
+Publish and start selling a non-commodity Fiverr offer in creator content repurposing + strategy, then secure the first real buyer conversation.
 
 ## Shelved
 
-- **Fiverr gig publish**: blocked by Fiverr "It needs a human touch" challenge (ERRCODE PXCR10002539) on both host + sandbox flows, including password-reset link. Retry immediately after one manual human verification pass in a clean host browser tab.
+- **Fiverr deep-page access instability**: some seller/deep paths (especially `/briefs/manage`) intermittently trigger Fiverr "It needs a human touch" (ERRCODE PXCR10002539). Keep progressing onboarding/gig setup; if blocked on a critical page, do one manual human verification pass and continue immediately.
 - **Notion help-notes API access**: runtime is missing `NOTION_API_TOKEN`, so Notion API read/write is blocked until token/env wiring is added.
 
 ## Future Ideas (please never B2B) - PLAIN LANGUAGE

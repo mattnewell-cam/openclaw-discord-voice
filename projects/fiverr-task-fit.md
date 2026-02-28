@@ -3,110 +3,104 @@
 ## Goal
 Identify Fiverr task/request types I can win and deliver fast with current skills + account state.
 
+## Constraint (important)
+Pick work that is:
+- **above** generic “paste into an LLM” commodity tasks, and
+- **below** heavy production tasks (e.g. full video editing pipelines).
+
+So: judgement-heavy, context-heavy, packaged strategic deliverables.
+
 ## What I checked (host headed browser)
 
+### Core request surfaces
 - Fiverr Help: **Personalized offers (Briefs) for freelancers**
-  - URL: `https://help.fiverr.com/hc/en-us/articles/4415608857745-Personalized-offers-Briefs-for-freelancers`
-  - Key facts:
-    - Briefs are sent to a small set of freelancers matching expertise/pricing.
-    - Delivery path is explicit: **Briefs page (Your matches)**, email, in-app notifications.
-    - You can **Create an offer / Ask questions / Not interested**.
-    - Declining briefs does **not** hurt metrics.
-    - Offer types include single payment, subscription, milestones, hourly.
+  - `https://help.fiverr.com/hc/en-us/articles/4415608857745-Personalized-offers-Briefs-for-freelancers`
+  - Briefs are matched to expertise/pricing and sent via Briefs page/email/in-app.
+  - Actions available: create offer, ask questions, not interested.
 
 - Fiverr Help: **Managing orders with Request to order**
-  - URL: `https://help.fiverr.com/hc/en-us/articles/36625767376017-Managing-orders-with-Request-to-order`
-  - Key facts:
-    - Moves order flow from instant buy to manual request review.
-    - Good for reducing bad-fit orders.
-    - **Only for Seller Plus Premium** (not immediate for a new seller).
+  - `https://help.fiverr.com/hc/en-us/articles/36625767376017-Managing-orders-with-Request-to-order`
+  - Manual order gating feature, but only for Seller Plus Premium.
 
 - Fiverr Help: **Custom offers**
-  - URL: `https://help.fiverr.com/hc/en-us/articles/360010559198-Custom-offers`
-  - Key facts:
-    - Sent from Inbox (`Create an offer`) and can be tailored to request.
-    - Supports single payment / subscriptions / milestones.
+  - `https://help.fiverr.com/hc/en-us/articles/360010559198-Custom-offers`
+  - Send tailored offers through inbox, with scoped deliverables/pricing.
 
-- Fiverr live category surfaces (demand signals)
-  - Social Media Marketing: `https://www.fiverr.com/categories/online-marketing/social-marketing` → **100,000+ results**
-  - Video Editing: `https://www.fiverr.com/categories/video-animation/video-editing` → **65,000+ results**
-  - Scriptwriting: `https://www.fiverr.com/categories/writing-translation/script-writing` → **7,200+ results**
-  - Website Content: `https://www.fiverr.com/categories/writing-translation/website-content` → **5,500+ results**
+### Opportunity categories (live demand signals)
+- **Social Media Strategy**: `https://www.fiverr.com/categories/online-marketing/social-marketing/social-media-strategy` → **2,400+ results**
+- **Content Strategy**: `https://www.fiverr.com/categories/writing-translation/content-strategy` → **693 results**
+- **Website Content**: `https://www.fiverr.com/categories/writing-translation/website-content` → **5,500+ results**
+- **Scriptwriting**: `https://www.fiverr.com/categories/writing-translation/script-writing` → **7,200+ results**
 
-- Seller state observed
-  - Seller onboarding page is available: `https://www.fiverr.com/seller_onboarding/overview`.
-  - It asks for LinkedIn PDF/CV upload or manual profile completion (~15 min).
-  - Some deeper pages (e.g. `/briefs/manage`) intermittently trigger **PXCR10002539** human-touch challenge.
+### Seller/account state
+- Seller onboarding page is available: `https://www.fiverr.com/seller_onboarding/overview`.
+- Some deep paths (e.g. `/briefs/manage`) can trigger PXCR10002539 intermittently.
 
 ---
 
-## Top 3 best-fit task types (for me, now)
+## Top 3 best-fit task types (revised for non-commodity niche)
 
-### 1) Social content repurposing packs (best fit)
-**Surface:** Social Media Marketing → Social Content / Social Media Strategy + custom offers from inbox/briefs.
+### 1) Creator Content Repurposing + Distribution Strategy (top pick)
+**What it is:** convert one long-form asset into channel-ready outputs *plus* publish strategy (angles, sequencing, CTA intent).
 
-**Why this is top-1:**
-- Directly matches current offer and samples already being built.
-- Fast turnaround from one source asset (podcast/video/newsletter) into many outputs.
-- Easier to scope fixed deliverables (e.g., 12 posts + 5 hooks + 1 newsletter draft).
-- Stronger chance to close quickly with concrete before/after examples.
+**Why this fits best:**
+- Not just rewriting text — includes audience/format judgement and channel packaging.
+- Directly matches existing project and proof assets in workspace.
+- Fast to deliver in fixed scopes (24–48h) without needing complex production software.
 
-### 2) Short-form scriptwriting (creator-focused)
-**Surface:** Scriptwriting (Video Scripts), plus brief responses and custom offers.
+### 2) Social Media Audit + Action Plan (X/LinkedIn/Instagram)
+**What it is:** profile/content diagnosis with concrete fixes, content pillars, hooks, and posting plan.
 
-**Why this is top-2:**
-- Tight overlap with repurposing skillset (hooks, structure, CTA, narrative pacing).
-- Lower delivery complexity than full video editing.
-- Can productize quickly with clear units: "10 short scripts" / "3 long-to-short conversions".
+**Why this fits:**
+- High-value reasoning deliverable; clients buy diagnosis and prioritization, not raw text output.
+- Present on Fiverr strategy surfaces with meaningful pricing (many gigs in £70–£200+ range).
+- Execution is feasible now: analysis + recommendations + examples.
 
-### 3) Light video editing for social clips
-**Surface:** Video Editing (Ads & social / YouTube snippets), potentially hourly-enabled listings later.
+### 3) Content Strategy Blueprint (30-day plan)
+**What it is:** audience angle map, pillar framework, topic backlog, format matrix, and weekly cadence.
 
-**Why this is top-3 (not top-1):**
-- Huge demand surface, but higher execution overhead and revision risk.
-- Competitive quality bar is higher than pure writing/strategy services.
-- Still viable as an upsell bundle attached to repurposing/script orders.
+**Why this fits:**
+- Above commodity writing; requires synthesis of niche, goals, and channel behavior.
+- Strong category signal in Content Strategy and Social Media Strategy.
+- Can be delivered as a repeatable template with customization.
 
 ---
 
-## One practical execution approach (chosen type: Social content repurposing packs)
+## De-prioritized
+- **Generic translation / low-context writing tasks** (too easy to commoditize with basic LLM usage).
+- **Hands-on video editing production** (execution risk and quality gap too high right now).
 
-### Positioning
-Offer a fixed, low-friction package for busy solo creators:
-- Input: 1 long-form asset (video/podcast/thread/newsletter)
-- Output: hooks + platform-ready posts + optional newsletter draft
-- Delivery: 24–48h
+---
 
-### Productized package v1
+## Practical execution approach (chosen type: Creator Repurposing + Distribution Strategy)
+
+### Productized offer (v1)
+**Input:** 1 long-form source (podcast/video/newsletter/thread)
+
+**Output:**
+- 12 short posts (platform-tailored)
 - 15 hooks
-- 12 X/LinkedIn-style short posts
 - 1 newsletter draft (400–700 words)
-- 3 title angles
+- 30-day posting sequence (what to post, in what order, and why)
+- CTA map (awareness vs conversion post intent)
 - 1 revision
 
-### Conversion workflow (inside Fiverr)
-1. **Finish seller onboarding profile** so seller surfaces are fully available.
-2. Create a service listing centered on the package above.
-3. Keep a saved response template for briefs/custom-offer replies:
-   - 2-line diagnosis of client need
-   - 3 bullet deliverables
-   - delivery time + one clarification question
-4. For each inbound brief/request:
-   - Accept only obvious fit (creator/business content with clear source material)
-   - Ask one scope-locking question if needed
-   - Send offer within minutes (speed matters)
-5. Fulfillment SOP:
-   - extract themes → draft hooks → map to posts → write newsletter → QA tone consistency
-6. At delivery, include one upsell option:
-   - weekly recurring repurposing pack (subscription-style custom offer)
+### Delivery promise
+- Turnaround: 24–48h
+- Tone matched to creator voice (using source material)
+- Includes rationale notes so client understands why each piece works
 
-### What would make this convert faster
-- 2–3 visual proof samples (before/after from one source asset)
-- Profile photo + concise credibility line
-- Clear gig FAQ about turnaround, revisions, and platforms covered
+### Fiverr execution loop
+1. Complete seller onboarding profile quickly.
+2. Publish gig centered on repurposing + strategy (not “I’ll write posts”).
+3. Use custom offers/brief replies with this structure:
+   - 1-line diagnosis of their current gap
+   - fixed deliverables list
+   - one clarifying question that tightens scope
+4. Prioritize briefs/requests with clear source material + clear audience.
+5. At delivery, upsell recurring weekly pack (subscription custom offer).
 
----
-
-## Current blockers
-- Intermittent Fiverr human-touch challenge on some deeper paths (`PXCR10002539`).
-- Seller onboarding not yet completed, which likely limits request surfaces and matching features.
+### Why this should convert better
+- Clear strategic layer (harder to replace with one prompt).
+- Tangible, fixed outputs clients can compare and buy quickly.
+- Close adjacency to urgent creator pain: “I have content but no distribution consistency.”

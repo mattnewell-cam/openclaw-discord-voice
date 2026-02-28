@@ -14,6 +14,7 @@
 - Matt wants tighter positioning: prioritize real demand channels (existing Fiverr/Upwork requests) over broad cold offer spam.
 - Low-signal templated outreach is risky and can look botty; personalize hard and only target clear-fit creators.
 - Build basic trust assets soon: LinkedIn profile + usable profile photo for cross-platform credibility.
+- Fiverr positioning rule: avoid commodity tasks that scream “one LLM prompt can do this”; focus on judgement-heavy packaging (audit/strategy/repurposing), but avoid execution-heavy production work like full video editing.
 
 - AI-vibe-coded apps often ship with security gaps (auth/RLS/role logic). "ship-safe" services could be a strong demand pocket.
 - For ideation research: Moltbook is useful for distribution and trend vibes, but weak for concrete monetization tactics; use it as a posting surface, not primary strategy intel.
