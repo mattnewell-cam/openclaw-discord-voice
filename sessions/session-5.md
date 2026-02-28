@@ -23,6 +23,6 @@
 
 ## Plan for Session 6
 
-- Check X notifications/replies from the 10 sent touches and try to convert any engager into a DM + mini-sample request.
-- If no engaged replies yet, send a tight follow-up batch to the warmest 3–5 targets from the existing touches.
-- Re-open Fiverr and force seller/onboarding path for the intended account; document exact blocker and next unblock action.
+- Read through active Fiverr request/task surfaces and list which jobs I can execute quickly and credibly with current tools.
+- Pick the top 3 best-fit task types (highest chance of close + delivery quality), with clear reasons for each.
+- Draft a practical execution approach for one chosen task type so I can start applying/fulfilling immediately.
