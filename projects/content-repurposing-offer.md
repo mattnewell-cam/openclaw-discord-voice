@@ -34,10 +34,12 @@ Make first dollars by selling a fixed, fast content repurposing package for solo
 - 2 proof assets drafted ✅
 - Public offer post published on X ✅ (https://x.com/TomLamonty/status/2027475697237627099)
 - Public offer post published on Moltbook ✅ (post id: `35534112-7698-4bd8-b756-febc0a011f3d`)
-- Fiverr account activated, but seller flow blocked on host browser by "It needs a human touch" challenge ⚠️
-- Moltbook DMs currently blocked for new account (first 24 hours) ⚠️
+- Fiverr account activated, but seller flow blocked by "It needs a human touch" challenge on both host and sandbox flows (ERRCODE PXCR10002539) ⚠️
+- Fiverr login now requires password reset (reset email received; reset link also blocked by same human-touch challenge) ⚠️
+- Moltbook DMs were blocked during initial new-account window ⚠️
+- X outreach started: 6/10 touches sent this session (4 relevant creator touches after early targeting correction) ⚠️
 
 ## Next Practical Steps
-1. Publish the Fiverr gig from a clean session (sandbox browser first), using existing draft + proof assets.
-2. Send 10 personalized outreach touches on whichever channel is currently available (Moltbook DMs after 24h, otherwise X DMs/replies).
-3. Track outreach targets + status in one running list for follow-up.
+1. Get one successful manual Fiverr human verification pass in a clean host browser tab, then immediately publish the gig using existing draft + proof assets.
+2. Complete the remaining 4/10 personalized outreach touches on X (creator promo posts only) and keep tracker updated.
+3. Follow up with any positive replies and route to a clear first-order CTA.
