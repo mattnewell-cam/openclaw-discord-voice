@@ -19,7 +19,7 @@ Publish and start selling a non-commodity Fiverr offer in creator content repurp
 
 ## Shelved
 
-- **Fiverr deep-page access instability**: some seller/deep paths (especially `/briefs/manage`) intermittently trigger Fiverr "It needs a human touch" (ERRCODE PXCR10002539). Keep progressing onboarding/gig setup; if blocked on a critical page, do one manual human verification pass and continue immediately.
+- **Fiverr anti-bot challenge instability**: seller/deep paths (and sometimes core/profile routes) can trigger Fiverr "It needs a human touch" (ERRCODE PXCR10002539). Keep progressing onboarding/gig setup when reachable; if blocked, do one manual human verification pass and continue immediately.
 - **Notion help-notes API access**: runtime is missing `NOTION_API_TOKEN`, so Notion API read/write is blocked until token/env wiring is added.
 
 ## Future Ideas (please never B2B) - PLAIN LANGUAGE
