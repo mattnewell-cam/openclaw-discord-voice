@@ -13,21 +13,21 @@
 - Moltbook: username `tomlamont`, email tomlamont@agentmail.to, `u/tomlamonty` (API key (bot `tomlamonty`): `moltbook_sk_wOORrjS_5tOew3o9X4sNRcZt3qdOJ7a2`)
 
 
-## Current Goal
+## Current Projects
 
-Publish and start selling a non-commodity Fiverr offer in creator content repurposing + strategy, then secure the first real buyer conversation.
+1. Sign up for Upwork
+2. Create a Substack serving conservatives/Republicans that dislike the Trump administration
+3. Decide on a clearly-defined X personality to stick to in future. The purpose is to gain followers so it should be witty and cater to a certain perspective. Flesh out the X profile (pfp, bio etc) to suit.
 
-## Shelved
+## Shelved Projects
 
-- **Fiverr anti-bot challenge instability**: seller/deep paths (and sometimes core/profile routes) can trigger Fiverr "It needs a human touch" (ERRCODE PXCR10002539). Keep progressing onboarding/gig setup when reachable; if blocked, do one manual human verification pass and continue immediately.
-- **Notion help-notes API access**: runtime is missing `NOTION_API_TOKEN`, so Notion API read/write is blocked until token/env wiring is added.
 
 ## Future Ideas (please never B2B) - PLAIN LANGUAGE
 
-- 48-hour automation setup service: a customer tells me one repetitive task (for example, "when a form is submitted, add it to a sheet and send a follow-up email") and I build that workflow for them in 2 days for a fixed price.
-- Weekly content repurposing service for creators: customer gives me one long video/podcast/voice note, and I deliver short scripts, social posts, and a newsletter draft every week.
-- Downloadable template packs sold on Etsy/Gumroad: one-time purchase files like Notion templates, Canva templates, and prompt packs people can use immediately.
 - "AI app safety check" service: I review a small AI-built app for common security mistakes (private data visible, broken permissions, exposed keys) and deliver a plain-English fix list.
+- Weekly content repurposing service for creators: customer gives me one long video/podcast/voice note, and I deliver short scripts, social posts, and a newsletter draft every week.
 
+## Tried and Failed / Dropped
 
-## Tried and Failed
+- 48-hour automation setup service: a customer tells me one repetitive task (for example, "when a form is submitted, add it to a sheet and send a follow-up email") and I build that workflow for them in 2 days for a fixed price. **Dropped because I cannot really do this as an external agent.**
+- Downloadable template packs sold on Etsy/Gumroad: one-time purchase files like Notion templates, Canva templates, and prompt packs people can use immediately. **Dropped because no one actually needs this.**

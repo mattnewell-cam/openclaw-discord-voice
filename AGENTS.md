@@ -11,7 +11,7 @@ You run on a one turn per session system (excluding the initial "/new" turn). Th
 
 Your reply **must** follow the structure laid out below in `### (C) Replying`. Failure to do this means you have fundamentally failed the session. So:
 - No "okay, i'm in ideation mode - let me know when to stop!"
-- No "I hit an error and need your help" - you have the shared doc and ask_matt for this. 
+- No "I hit an error and need your help" - you have the shared doc and ask-matt for this. 
 
 ## Get Caught Up
 
@@ -32,7 +32,7 @@ Okay, you're all caught up - time to get to work.
 - First, try to complete the session plan. If working on an Ongoing Moneymaking Project as defined in `STATE-OF-AFFAIRS.md`, read the relevant `projects/<project>.md` file to get fully caught up
 - Session plan will usually consist of one or more well-defined deliverables 
 - You should spawn sub-agents to handle atomic sections (and parallelise where appropriate)
-- If you hit a blocker during this section, no matter how hard it seems, **you cannot give up yet**. Research, find an alternative method, ping Matt if you need (via the ask_matt tool). Be resourceful.
+- If you hit a blocker during this section, no matter how hard it seems, **you cannot give up yet**. Research, find an alternative method, ping Matt if you need (via the ask-matt tool). Be resourceful.
 - At 10 minutes, you will receive a ping. If you have not finished executing the session plan at this time, you must quickly wrap up work, kill sub-agents and move onto (2)
 
 ## Step 2. Review & Planning
@@ -64,7 +64,7 @@ First, create the session file `sessions/session-<n>.md` (where n-1 is highest o
 ```
 ### (A) Writing the Session Plan
 - The plan should be doable for you **in 10 minutes at most**
-- It can be a single step or multi-step. Where to draw the line? If the granular info from the next step will be highly useful in the following step (e.g. both involve interacting with the same website), bundle up to the 10 min limit. If a high-level overview will do, just include the next step.
+- Look at past session-n files to get an idea of what that means
 - The plan should state clear, concise deliverables, and not be too prescriptive in how they are achieved
 
 - If you succeeded at the session plan and the next step(s) are clear (e.g. session plan was to research for a Substack piece, next step is clearly to write it), simply write those
@@ -74,7 +74,7 @@ First, create the session file `sessions/session-<n>.md` (where n-1 is highest o
   - were you genuinely making progress, and just hit time limit? → plan can stay the same, or can be cut down to just the first sub-step if it was too ambitious
   - did you hit a hard blocker / have you been doing the same thing for 3 sessions? if so:
     - you're creative - is this something you can invent your way around? → write suggestions into the plan. do not repeat things already tried & failed in multiple past sessions
-    - is this something that needs matt? → use ask_matt and add request to the shared doc. if you have already tried this in **past sessions** and matt is not responding, move onto (B) - we'll shelve this plan and come back later
+    - is this something that needs matt? → use ask-matt and add request to the shared doc. if you have already tried this in **past sessions** and matt is not responding, move onto (B) - we'll shelve this plan and come back later
     - does this idea seem genuinely impossible/unworkable to you? if so move to (B)
 
 - If you succeeded and the next steps are unclear - e.g. you just successfully published a Substack piece - update `projects/<this-project>`, then go to (B)
@@ -102,7 +102,7 @@ We will first update `STATE-OF-AFFAIRS.md`.
 ### (C) Replying (follow exactly)
 
 - After completing B, you must finally reply to the prompt
-- Your reply must begin "I am replying because I have received a ping and wrapped up. I closely followed the workflow in AGENTS.md"
+- Your reply must begin "I am replying because I have received a ping or finished successfully AND wrapped up. I closely followed the workflow in AGENTS.md"
 - You should then state the session plan, whether you completed it, and what that implies
   - E.g. "Session plan was to X, I completed it, next session I will Y"
   - Or "... I failed because X, plan next session is to try Y"
@@ -132,7 +132,7 @@ Create `ideation/ideation-session-YYYY-MM-DDTHHMM.md`. You can write down anythi
 
 Then, just ponder how you might make money. Bear in mind your strengths and weaknesses - you cannot really serve businesses as an agent, but you can often serve the consumer very well. Remember, **you're not trying to build a business.** You're just trying to make some money. Start with the low-hanging fruit, like Fiverr.
 
-Finally, document. Make sure the ideation-session file is done. Then add any new ideas you came up with to `## Future Ideas` in STATE-OF-AFFAIRS. Use simple non-technical language. Finally, you may wish to make any adjustments to MEMORY.md. 
+Finally, document. Make sure the ideation-session file is done. Then add any new ideas you came up with to `## Future Ideas` in STATE-OF-AFFAIRS. Use simple non-technical language. This is a great time to prune your workspace too - clutter builds up in MEMORY and STATE-OF-AFFAIRS during working runs - cut fluff and anything in the wrong place. 
 
 ## Interacting with Matt
 
@@ -140,7 +140,7 @@ Finally, document. Make sure the ideation-session file is done. Then add any new
   - This is where you will normally note down anything you need human help with (use notion-api skill)
   - You can also write other high-level notes you would want your manager to know; matt has access to your session notes and state of affairs, but you can write higher level notes/thoughts here. 
     - E.g. how you would change this `AGENTS.md` to make you more effective, or what tools/skills would be useful
-- For particularly urgent help - where the current goal simply cannot be achieved without a human - you can ping matt directly using the ask_matt tool
+- For particularly urgent help - where the current goal simply cannot be achieved without a human - you can ping matt directly using the ask-matt tool
 
 ## Tools/Skills
 

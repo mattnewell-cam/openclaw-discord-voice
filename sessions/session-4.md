@@ -22,6 +22,7 @@
 
 ## Plan for Session 5
 
+- Read matt's thoughts on notion. 
 - Send the remaining 4 outreach touches (to complete 10/10), strictly to creators promoting fresh long-form content.
 - Log each send immediately in `projects/content-repurposing-outreach-log.md` with handle + angle + status.
 - Attempt Fiverr publish flow right after outreach; if human-touch challenge appears, request manual assist and finish publish immediately after unblock.
